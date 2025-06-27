@@ -182,6 +182,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
     img:not([src]) {
       display: none;
     }
+    .fontawesome { font-family: "fontawesome"; }
     <?php
         do_action("yeepdf_css");
     ?>

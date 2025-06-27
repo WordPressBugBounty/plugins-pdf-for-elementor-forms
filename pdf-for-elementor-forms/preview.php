@@ -18,7 +18,7 @@ if( isset($_GET['id'])) {
     $user = wp_get_current_user();
     $allowed_roles = array('editor', 'administrator', 'author',"shop_manager");
     $check = false;
-    if ( isset( $_REQUEST['_wpnonce']) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'yeepdf' ) ) {
+    if ( isset( $_REQUEST['_wpnonce']) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'pdf_creator' ) ) {
         $check = true;
     }
     if( array_intersect($allowed_roles, $user->roles ) ) {

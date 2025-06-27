@@ -6,8 +6,18 @@ class Yeepdf_Ajax {
 		add_action( 'wp_ajax_yeepdf_builder_send_email_testing', array($this,'yeepdf_builder_send_email_testing') );
 		add_action( 'wp_ajax_yeepdf_builder_export_html', array($this,'yeepdf_builder_export_html') );
 		add_action( 'wp_ajax_pdf_reset_template', array($this,'pdf_reset_template') );
+		add_action( 'wp_ajax_yeepdf_import_template', array($this,'yeepdf_import_template') );
 		add_action("admin_init",array($this,"pdf_reset_template_php"));
 		add_action('add_meta_boxes', array($this,'remove_wp_seo_meta_box'), 100);
+	}
+	function yeepdf_import_template(){
+		$url = sanitize_text_field($_POST['url']);
+		$upload_dir = wp_upload_dir();
+		$path = str_replace($upload_dir['baseurl'], $upload_dir['basedir'], $url);
+		$json_content = file_get_contents($path);
+		$data = json_decode($json_content, true); 
+		wp_send_json($data);
+		die();
 	}
 	function pdf_reset_template(){
 		if( isset($_POST["id"])){ 

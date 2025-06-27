@@ -11,9 +11,11 @@ class Yeepdf_Builder_PDF_Shortcode {
 		foreach($lists as $key=>$values){
 			foreach($values as $k=>$v){
 				if(!is_array($v)){
+					$k = strtok($k, " ");
 					add_shortcode( $k, array($this,'shortcode_main') );
 				}else{
 					foreach($v as $kc=>$vc){
+						$k = strtok($kc, " ");
 						add_shortcode( $kc, array($this,'shortcode_main') );
 					}
 				}
@@ -30,6 +32,7 @@ class Yeepdf_Builder_PDF_Shortcode {
 				"yeepdf_current_date" => "Current Date",
 				"yeepdf_current_time" => "Current Time",
 				"yeepdf_random_number" => "Random Number",
+				"yeepdf_fontawesome unicode='f2b4'" => "Awesome Icon V6",
 			),
 			"User" => array(
 				"yeepdf_user_login_url" => "User Login URL",
@@ -82,6 +85,12 @@ class Yeepdf_Builder_PDF_Shortcode {
 	}
 	function shortcode_main($atts, $content="", $tag=""){
 		switch ($tag) {
+			case "yeepdf_fontawesome":
+				$atts = shortcode_atts( array(
+					'unicode' => 'f2b4',
+				), $atts);
+				return '<span class="fontawesome">&#x'.$atts["unicode"].';</span>';
+				break;
 			case "yeepdf_site_url":
 				return site_url();
 				break;

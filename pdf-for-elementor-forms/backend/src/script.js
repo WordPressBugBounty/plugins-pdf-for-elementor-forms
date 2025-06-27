@@ -250,7 +250,19 @@
                       }
                     });
                 }).fail(function(){
-                  alert("Error");
+                  var data = {
+                      'action': 'yeepdf_import_template',
+                      'url': attachment.url
+                    };
+                    jQuery.post(ajaxurl, data, function(response) {
+                        $(".data_email").val(response);
+                        yeepdf_builder_main.json_to_builder();
+                        $( ".builder-row-container-row" ).each(function( index ) {
+                          if( $(this).attr("background_full") != "not" ){
+                            $(this).closest(".builder-row-container").css("background-color",$(this).css("background-color"));
+                          }
+                        });
+                    });
                 });
             })
             .open();

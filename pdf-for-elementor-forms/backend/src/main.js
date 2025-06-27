@@ -170,8 +170,8 @@
                                   if(data > count_col){
                                     var count_col_plus = count_col;
                                     for (count_col_plus; count_col_plus < data; count_col_plus++) {
-                                      html_table.find("thead tr").append('<th>'+table_th_header+'</th>');
-                                      html_table.find("tbody tr").append('<td>'+table_td_header+'</td>');
+                                      html_table.find("thead tr").append('<th contenteditable="true">'+  +'</th>');
+                                      html_table.find("tbody tr").append('<td contenteditable="true">'+table_td_header+'</td>');
                                     }  
                                   }else if(data < count_col){
                                     var count_col_minus = count_col;
@@ -507,6 +507,11 @@
           if( str === undefined){
             return str;
           }
+          if(str != ""){
+              str = str.replace(/\[yeepdf_fontawesome unicode=['"]?([a-f0-9]+)['"]?\]/gi, function(match, unicode) {
+                return `<span class="fontawesome">&#x${unicode};</span>`;
+              });
+            }
             let re = new RegExp(yeepdf_script.builder_shorcode_re, "gi");
             str = str.replaceAll(re, function (matched) {
                 matched = matched.replace(/\[|\]/gi, "");

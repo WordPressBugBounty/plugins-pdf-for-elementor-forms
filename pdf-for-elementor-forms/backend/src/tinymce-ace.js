@@ -18,8 +18,14 @@
     });
     $('#'+editor.id).on('keyup', function(){
         tinyMCE.activeEditor.setContent($(this).val());
+        var data = $(this).val();
+        if(data != ""){
+            data = data.replace(/\[yeepdf_fontawesome unicode=['"]?([a-f0-9]+)['"]?\]/gi, function(match, unicode) {
+              return `<span class="fontawesome">&#x${unicode};</span>`;
+            });
+          }
          $(".builder-elements-content.wp_builder_pdf_focus .text-content-data").html($(this).val()); 
-         $(".builder-elements-content.wp_builder_pdf_focus .text-content").html($(this).val()); 
+         $(".builder-elements-content.wp_builder_pdf_focus .text-content").html(data); 
     });
     var toggleCode = function(elem, editor){
         elem.active( !elem.active() );

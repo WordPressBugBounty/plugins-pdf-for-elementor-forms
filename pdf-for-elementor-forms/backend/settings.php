@@ -208,6 +208,9 @@ class Yeepdf_Settings_Main {
 					'I' => "DejaVuSerif-Italic.ttf",
 					'BI' => "DejaVuSerif-BoldItalic.ttf",
 				],
+			"fontawesome" => [
+					'R' => "fontawesome.ttf",
+				],
 		);
 	}
 	function add_sizes($sizes){

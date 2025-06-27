@@ -17,6 +17,20 @@ class Yeepdf_Creator_form_widget_Backend {
         add_action( 'wp_ajax_yeepdf_el_get_entries', array($this,"yeepdf_el_get_entries") );
         add_filter( 'yeepdf_builder_shortcode', array($this,'builder_shortcode') );
         add_filter( 'yeepdf_output_html', array($this,'yeepdf_output_html'),10,2 );
+        //add_filter( 'yeepdf_el_format_input',array($this,"yeepdf_el_format_input"),10,2);
+	}
+	function yeepdf_el_format_input($value,$field){
+		if( isset($field["type"]) && $field["type"] == "checkbox" && $value != ""){
+			$html = "<ul>";
+			$datas_li = explode(",",$value);
+			foreach($datas_li as $vl ){
+				$vl = trim($vl);
+				$html .= '<li>'.$vl.'</li>';
+			}
+			$html .= "</ul>";
+			return $html;
+		}
+		return $value;
 	}
 	function builder_shortcode($shortcodes){
 		global $post, $wpdb;
@@ -245,7 +259,7 @@ class Yeepdf_Creator_form_widget_Backend {
 		$raw_fields = $record->get( 'fields' );
 		$form_data = array();
 	    foreach ( $raw_fields as $id => $field ) {
-	        $form_data[ "[field id='".$id."']" ] = $field['value'];
+	        $form_data[ "[field id='".$id."']" ] = apply_filters("yeepdf_el_format_input",$field['value'],$field);
 	    }
 		$upload_dir   = wp_upload_dir();
 		for($i = 1; $i<11; $i++) {

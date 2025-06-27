@@ -432,6 +432,16 @@ class Yeepdf_Settings_Builder_PDF_Backend {
             $google_fonts = get_option("pdf_custom_fonts",array());
             ?>
         <style type="text/css">
+         @font-face {
+              font-family: 'fontawesome';
+              font-style: normal;
+              font-weight: 400;
+              font-display: block;
+              src:  url(<?php echo esc_url(YEEPDF_CREATOR_BUILDER_PATH) ?>"vendor/mpdf/mpdf/ttfonts/fontawesome.ttf") format("truetype"); 
+          }
+          .fontawesome {
+            font-family: "fontawesome";
+          }
         <?php foreach($fonts as $key=> $value) {
             foreach($value as $k=> $vl) {
                 if(is_readable($fontDirs[0]."/".$vl)) {

@@ -3,7 +3,7 @@ Contributors: addonsorg
 Tags: pdf Elementor, Elementor form pdf, Elementor pdf, Elementor forms pdf
 Requires at least: 2.0
 Tested up to: 6.8
-Stable tag: 5.9.0
+Stable tag: 6.0.0
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -47,6 +47,9 @@ We can use Page Break and new content will be move on next pages in PDF.
 == Multilingual ==
 A multitude of languages from across the globe can be displayed in PDFs, include complex scripts like Hebrew, Arabic, Thai, Japanese, Chinese, and Korean.
 
+== Elementor Form PDF ==
+Elementor PDF, Elementor Form PDF, Elementor export PDF, Elementor form to PDF, Elementor PDF generator, Elementor PDF download, Elementor PDF attachment, Elementor PDF plugin, Elementor PDF integration, Elementor PDF automation, Elementor PDF submission, Elementor PDF template, Elementor PDF email, Elementor PDF builder, Elementor PDF generator for forms
+
 
 == PRO VERSION ==
 * Table Customization
@@ -71,6 +74,13 @@ Document: <https://pdf.add-ons.org/document/>
 
 
 == Changelog ==
+= 6.0.0 =
+- Added: Font awesome ( [yeepdf_fontawesome unicode='f2b4'] use Unicode ) https://fontawesome.com/search?o=r&ic=free&s=regular&ip=classic
+
+= 5.9.1 =
+- Fixed: Edit table
+- Added: Hook change format input
+
 = 5.5.1 =
 - Fixed: Line breaks Textarea
 
