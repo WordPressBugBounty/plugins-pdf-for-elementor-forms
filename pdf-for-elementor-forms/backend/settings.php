@@ -208,6 +208,12 @@ class Yeepdf_Settings_Main {
 					'I' => "DejaVuSerif-Italic.ttf",
 					'BI' => "DejaVuSerif-BoldItalic.ttf",
 				],
+			"OpenSans" => [
+					'R' => "OpenSans-Regular.ttf",
+					'B' => "OpenSans-Bold.ttf",
+					'I' => "OpenSans-Italic.ttf",
+					'BI' => "OpenSans-BoldItalic.ttf",
+				],
 			"fontawesome" => [
 					'R' => "fontawesome.ttf",
 				],

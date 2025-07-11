@@ -588,75 +588,75 @@ class Yeepdf_Settings_Builder_PDF_Backend {
     }
     function add_page_templates(){
         ?>
-<div id="yeepdf-email-templates" style="display:none">
-    <div class="list-view-templates">
-        <?php 
-              $args = array(
-                    "json"=>"",
-                    "img"=>YEEPDF_CREATOR_BUILDER_URL."backend/demo/template1/1.png",
-                    "title"=>"Email templates",
-                    "cat" => array(),
-                    "id"=>0,
-                );
-              do_action( "builder_yeepdfs" );
-               ?>
-    </div>
-</div>
-<div id="yeepdf-builder-shortcodes-templates" style="display:none">
-    <div class="list-view-short-templates">
-        <?php 
-                $shortcodes = Yeepdf_Builder_PDF_Shortcode::list_shortcodes();
-                foreach( $shortcodes as $shortcode_k =>$shortcode_v){
-              ?>
-        <h3><?php echo esc_html( $shortcode_k ) ?></h3>
-        <?php 
-                foreach( $shortcode_v as $k =>$v){
-                    if(is_array($v)){
-                        ?>
-        <h4><?php echo esc_html( $k ) ?></h4>
-        <?php
-                        foreach( $v as $k_i =>$v_i){
-                            ?>
-        <div class="list-view-short-templates-r">
-            <div class="list-view-short-templates-k" title="Click to copy">
+        <div id="yeepdf-email-templates" style="display:none">
+            <div class="list-view-templates">
                 <?php 
-                if (strpos($k_i, "{") === false) { 
-                    echo esc_html( "[".$k_i."]" );
-                }else{
-                    echo esc_html( $k_i);
-                }
-                ?>
-            </div>
-            <div class="list-view-short-templates-v">
-                <?php echo esc_html( $v_i ) ?>
+                      $args = array(
+                            "json"=>"",
+                            "img"=>YEEPDF_CREATOR_BUILDER_URL."backend/demo/template1/1.png",
+                            "title"=>"Email templates",
+                            "cat" => array(),
+                            "id"=>0,
+                        );
+                      do_action( "builder_yeepdfs" );
+                       ?>
             </div>
         </div>
-        <?php
+        <div id="yeepdf-builder-shortcodes-templates" style="display:none">
+            <div class="list-view-short-templates">
+                <?php 
+                        $shortcodes = Yeepdf_Builder_PDF_Shortcode::list_shortcodes();
+                        foreach( $shortcodes as $shortcode_k =>$shortcode_v){
+                      ?>
+                <h3><?php echo esc_html( $shortcode_k ) ?></h3>
+                <?php 
+                        foreach( $shortcode_v as $k =>$v){
+                            if(is_array($v)){
+                                ?>
+                <h4><?php echo esc_html( $k ) ?></h4>
+                <?php
+                                foreach( $v as $k_i =>$v_i){
+                                    ?>
+                <div class="list-view-short-templates-r">
+                    <div class="list-view-short-templates-k" title="Click to copy">
+                        <?php 
+                        if (strpos($k_i, "{") === false) { 
+                            echo esc_html( "[".$k_i."]" );
+                        }else{
+                            echo esc_html( $k_i);
                         }
-                    }else{
                         ?>
-        <div class="list-view-short-templates-r">
-            <div class="list-view-short-templates-k" title="Click to copy">
-                <?php 
-                if (strpos($k, "{") === false) { 
-                    echo esc_html( "[".$k."]" );
-                }else{
-                    echo esc_html( $k);
-                }
-                ?>
-            </div>
-            <div class="list-view-short-templates-v">
-                <?php echo esc_html( $v ) ?>
+                    </div>
+                    <div class="list-view-short-templates-v">
+                        <?php echo esc_html( $v_i ) ?>
+                    </div>
+                </div>
+                <?php
+                                }
+                            }else{
+                                ?>
+                <div class="list-view-short-templates-r">
+                    <div class="list-view-short-templates-k" title="Click to copy">
+                        <?php 
+                        if (strpos($k, "{") === false) { 
+                            echo esc_html( "[".$k."]" );
+                        }else{
+                            echo esc_html( $k);
+                        }
+                        ?>
+                    </div>
+                    <div class="list-view-short-templates-v">
+                        <?php echo esc_html( $v ) ?>
+                    </div>
+                </div>
+                <?php
+                            }
+                        }
+                        } 
+                      ?>
             </div>
         </div>
         <?php
-                    }
-                }
-                } 
-              ?>
-    </div>
-</div>
-<?php
     }
     public static function item_demo($args1){
         $defaults = array(
@@ -672,27 +672,27 @@ class Yeepdf_Settings_Builder_PDF_Backend {
         $url_view = $domain."?pdf_preview=preview&id=".$args["id"]."&woo_order=18";
         $url_design = $domain."?templates_id=".$args["id"];
         ?>
-<div class="grid-item" data-file="<?php echo esc_url($args["json"]) ?>">
-    <img src="<?php echo esc_url($args["img"]) ?>">
-    <div class="demo_content">
-        <div class="demo-title"><?php echo esc_html($args["title"]) ?></div>
-        <div class="demo-tags"><?php echo implode(", ",$args["cat"]) ?></div>
-        <div class="yeepdf-email-actions">
-            <div class="demo-fl">
-                <a class="button yeepdf-email-actions-import"
-                    href="#"><?php esc_html_e("Import","pdf-for-wpforms") ?></a>
-                <a target="_blank" class="button yeepdf-email-actions-design"
-                    href="<?php echo esc_url($url_design) ?>"><?php esc_html_e("Design","pdf-for-wpforms") ?></a>
+        <div class="grid-item" data-file="<?php echo esc_url($args["json"]) ?>">
+            <img src="<?php echo esc_url($args["img"]) ?>">
+            <div class="demo_content">
+                <div class="demo-title"><?php echo esc_html($args["title"]) ?></div>
+                <div class="demo-tags"><?php echo implode(", ",$args["cat"]) ?></div>
+                <div class="yeepdf-email-actions">
+                    <div class="demo-fl">
+                        <a class="button yeepdf-email-actions-import"
+                            href="#"><?php esc_html_e("Import","pdf-for-wpforms") ?></a>
+                        <a target="_blank" class="button yeepdf-email-actions-design"
+                            href="<?php echo esc_url($url_design) ?>"><?php esc_html_e("Design","pdf-for-wpforms") ?></a>
+                    </div>
+                    <div class="demo-fr">
+                        <a target="_blank" class="button yeepdf-email-actions-view"
+                            href="<?php echo esc_url($url_view) ?>"><?php esc_html_e("Preview","pdf-for-wpforms") ?></a>
+                    </div>
+                    <div class="clear"></div>
+                </div>
             </div>
-            <div class="demo-fr">
-                <a target="_blank" class="button yeepdf-email-actions-view"
-                    href="<?php echo esc_url($url_view) ?>"><?php esc_html_e("Preview","pdf-for-wpforms") ?></a>
-            </div>
-            <div class="clear"></div>
         </div>
-    </div>
-</div>
-<?php
+        <?php
     }
     function duplicate_post_link($actions, $post){
         if ($post->post_type=='yeepdf' && current_user_can('edit_posts') ){

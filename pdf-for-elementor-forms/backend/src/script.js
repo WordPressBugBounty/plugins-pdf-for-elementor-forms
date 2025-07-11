@@ -373,7 +373,7 @@
                },
             });
         })
-        $("body").on("click",".yeepdf-email-actions-import",function(e){
+        $("body").on("click","#yeepdf-email-templates .yeepdf-email-actions-import",function(e){
             e.preventDefault();
             var attachment = $(this).closest(".grid-item").data("file");
                 $.getJSON(attachment, function(data){
@@ -385,7 +385,65 @@
                         $(this).closest(".builder-row-container").css("background-color",$(this).css("background-color"));
                       }
                     });
-                    tb_remove();
+                    $("#yeepdf-email-templates").dialog("close");
+                }).fail(function(){
+                  alert("Error");
+                });
+        })
+        $("body").on("click","#yeepdf-setup-template .yeepdf-email-actions-import",function(e){
+            e.preventDefault();
+            var title = $("#yeepdf-setup-form-title").val();
+            var form = $("#yeepdf-setup-form-id").val();
+            var type = $("#yeepdf-setup-type").val();
+            if( title == "" ){
+                alert("Please enter the template name.");
+                $("#yeepdf-setup-form-title").focus();
+                return;
+            }
+            if( form == "" ){
+                alert("Please select a form.");
+                return;
+            }
+            $("#titlewrap input").val(title);
+            switch (type){
+                case "wpforms":
+                    $(".pdfcreator_wpforms").val(form);
+                    break;
+                case "elementor":
+                    $(".pdfcreator_formwidget").val(form);
+                    break;
+                case "contact_form_7":
+                    $(".yeepdf_contact_form_7").val(form);
+                    break;
+                case "gravityforms":
+                    $(".yeepdf_pdf_gf_data").val(form);
+                    break;
+                case "gravityforms":
+                    $(".yeepdf_pdf_gf_data").val(form);
+                    break;
+                case "ninjaforms":
+                    $(".yeepdf_ninjaforms_data").val(form);
+                    break;
+                default:
+                    $(".yeepdf-testting-order select").first().val(form);
+                    break;
+            }
+            var attachment = $(this).closest(".grid-item").data("file");
+                $.getJSON(attachment, function(data){
+                    $(".data_email").val(data);
+                    $(".builder__list").html("");
+                    yeepdf_builder_main.json_to_builder();
+                    $( ".builder-row-container-row" ).each(function( index ) {
+                      if( $(this).attr("background_full") != "not" ){
+                        $(this).closest(".builder-row-container").css("background-color",$(this).css("background-color"));
+                      }
+                    });
+                    setTimeout(function() {
+                      $('#publish').click();
+                    }, 1000);
+                    setTimeout(function() {
+                      $("#yeepdf-email-templates").dialog("close");
+                    }, 3000);
                 }).fail(function(){
                   alert("Error");
                 });

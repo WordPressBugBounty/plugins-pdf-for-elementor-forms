@@ -3,7 +3,7 @@ Contributors: addonsorg
 Tags: pdf Elementor, Elementor form pdf, Elementor pdf, Elementor forms pdf
 Requires at least: 2.0
 Tested up to: 6.8
-Stable tag: 6.0.0
+Stable tag: 6.2.0
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -47,8 +47,6 @@ We can use Page Break and new content will be move on next pages in PDF.
 == Multilingual ==
 A multitude of languages from across the globe can be displayed in PDFs, include complex scripts like Hebrew, Arabic, Thai, Japanese, Chinese, and Korean.
 
-== Elementor Form PDF ==
-Elementor PDF, Elementor Form PDF, Elementor export PDF, Elementor form to PDF, Elementor PDF generator, Elementor PDF download, Elementor PDF attachment, Elementor PDF plugin, Elementor PDF integration, Elementor PDF automation, Elementor PDF submission, Elementor PDF template, Elementor PDF email, Elementor PDF builder, Elementor PDF generator for forms
 
 
 == PRO VERSION ==
@@ -61,6 +59,11 @@ Elementor PDF, Elementor Form PDF, Elementor export PDF, Elementor form to PDF, 
 * Conditional logics Supports
 * 30-day money-back guarantee
 * 1-year support
+
+== External services ==
+
+This plugin connects to the Dropbox API to store PDF files. Data is only sent to Dropbox when the user has configured and enabled the integration in the plugin settings. This service is provided by Dropbox, Inc.
+terms of use <https://www.dropbox.com/terms>, privacy policy <https://www.dropbox.com/privacy>
 	
 
 == Installation ==
@@ -74,6 +77,9 @@ Document: <https://pdf.add-ons.org/document/>
 
 
 == Changelog ==
+= 6.2.0 =
+- Added:  Installation wizard template
+
 = 6.0.0 =
 - Added: Font awesome ( [yeepdf_fontawesome unicode='f2b4'] use Unicode ) https://fontawesome.com/search?o=r&ic=free&s=regular&ip=classic
 

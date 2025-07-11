@@ -1,6 +1,7 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 //version 1.4: Add voucher
+ini_set('pcre.backtrack_limit', 10000000);
 if (!function_exists('str_contains')) {
     function str_contains($haystack, $needle) {
         return $needle !== '' && mb_strpos($haystack, $needle) !== false;
@@ -625,6 +626,7 @@ class Yeepdf_Create_PDF {
 								$table = $v;
 								$table= preg_replace('/<td[^>]*\bhidden\b[^>]*>.*?<\/td>/is', '', $table);
 								$table= preg_replace('/<th[^>]*\bhidden\b[^>]*>.*?<\/th>/is', '', $table);
+								$table= preg_replace('/<tfoot[^>]*\bhidden\b[^>]*>.*?<\/tfoot>/is', '', $table);
 								$html_el->find( $key ,0)->__set("innertext",$table);
 							}
 							elseif( $k == "html"){

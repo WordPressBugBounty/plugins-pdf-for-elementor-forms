@@ -18,6 +18,95 @@ class Yeepdf_Creator_form_widget_Backend {
         add_filter( 'yeepdf_builder_shortcode', array($this,'builder_shortcode') );
         add_filter( 'yeepdf_output_html', array($this,'yeepdf_output_html'),10,2 );
         //add_filter( 'yeepdf_el_format_input',array($this,"yeepdf_el_format_input"),10,2);
+        add_filter("yeepdf_setup_id",array($this,"yeepdf_setup_id"),10,2);
+		add_filter("yeepdf_setup_type",array($this,"yeepdf_setup_type"));
+		add_filter("yeepdf_setup_forms",array($this,"yeepdf_setup_forms"),10,2);
+	}
+	function yeepdf_setup_type($type){
+		return "elementor";
+	}
+	function yeepdf_setup_id($value, $post_id){
+		$form_id = get_post_meta( $post_id,'_pdfcreator_formwidget',true);	
+		if($form_id != ""){
+			return $form_id;
+		}
+		$check = get_option( "yeepdf_elementor_forms_setup" );
+		if($check == $post_id) {
+			return 0;
+		}
+		return $value;
+	}
+	function yeepdf_setup_forms($forms, $post_id){
+		$lists_form = $this->get_list_forms();
+			foreach ( $lists_form as $form ) {
+				$post_id = $form->ID;
+				$document = Plugin::$instance->documents->get( $post_id );
+				if ( ! $document ) {
+					continue;
+				}
+				$data = $document->get_elements_data();
+				if ( empty( $data ) ) {
+					continue;
+				}
+				$data_form = $data;
+				foreach ( $data_form as $section ){
+					foreach ( $section["elements"] as $column ){ 
+						if( isset($column["elements"]) && count($column["elements"]) > 0 ){
+							$datas_elements = $column["elements"];
+							foreach ( $datas_elements as $widget ){ 
+								if( isset($widget["elements"]) && count($widget["elements"]) > 0 ){
+									$datas_elements_inner = $widget["elements"];
+									foreach ( $datas_elements_inner as $widget_inner ){ 
+										if( isset($widget_inner["elements"]) && count($widget_inner["elements"]) > 0 ){
+											$datas_elements_inner_1 = $widget_inner["elements"];
+											foreach ( $datas_elements_inner_1 as $widget_inner1 ){
+												if( isset($widget_inner1["elements"]) && count($widget_inner1["elements"]) > 0 ){
+													$datas_elements_inner_2 = $widget_inner1["elements"];
+													if( isset($datas_elements_inner_2["widgetType"]) && isset($datas_elements_inner_2["settings"]["form_name"]) ) {
+														$form_id = $datas_elements_inner_2["id"];
+														$form_id = $form_id . "-" .$post_id;
+														$form_title = $datas_elements_inner_2["settings"]["form_name"];
+														$forms[$form_id] = esc_html($form_title  .' - '. $widget["id"] .' ('.$form->post_title.')');
+													}
+												}else{
+													if( isset($widget_inner1["widgetType"]) && isset($widget_inner1["settings"]["form_name"]) ) {
+														$form_id = $widget_inner1["id"];
+														$form_id = $form_id . "-" .$post_id;
+														$form_title = $widget_inner1["settings"]["form_name"];
+														$forms[$form_id] = esc_html($form_title  .' - '. $widget["id"] .' ('.$form->post_title.')');
+													}
+												}
+											}
+										}else{
+											if( isset($widget_inner["widgetType"]) && isset($widget_inner["settings"]["form_name"]) ) {
+												$form_id = $widget_inner["id"];
+												$form_id = $form_id . "-" .$post_id;
+												$form_title = $widget_inner["settings"]["form_name"];
+												$forms[$form_id] = esc_html($form_title  .' - '. $widget["id"] .' ('.$form->post_title.')');
+											}
+										}
+									}
+								}else{
+									if( isset($widget["widgetType"]) && isset($widget["settings"]["form_name"]) ) {
+										$form_id = $widget["id"];
+										$form_id = $form_id . "-" .$post_id;
+										$form_title = $widget["settings"]["form_name"];
+										$forms[$form_id] = esc_html($form_title  .' - '. $widget["id"] .' ('.$form->post_title.')');
+									}
+								}
+							}
+						}else{
+							if( isset($column["widgetType"]) && isset($column["settings"]["form_name"]) ) {
+								$form_id = $column["id"];
+								$form_id = $form_id . "-" .$post_id;
+								$form_title = $column["settings"]["form_name"];
+								$forms[$form_id] = esc_html($form_title  .' - '. $column["id"] .' ('.$form->post_title.')');
+							}
+						}
+					}
+				}
+			}
+		return $forms;
 	}
 	function yeepdf_el_format_input($value,$field){
 		if( isset($field["type"]) && $field["type"] == "checkbox" && $value != ""){

@@ -27,11 +27,13 @@
                     case "border-color":
                       break;
                     case "width":
-                      var data1 = html_emlement.find(key)[0].style.width;
+                      var el = html_emlement.find(key)[0];
+                      var data1 = el ? el.style.width : "auto";
                       style_content[style] = data1;
                       break;
                     case "height":
-                      var data1 = html_emlement.find(key)[0].style.height;
+                      var el = html_emlement.find(key)[0];
+                      var data1 = el ? el.style.height : "auto";
                       style_content[style] = data1;
                       break;
                     case "border-width":

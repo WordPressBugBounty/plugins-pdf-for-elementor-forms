@@ -446,5 +446,21 @@
                 field.html(value);
             }, 1000);
         })
+
+        //
+        if ($('#yeepdf-setup-template_id').length && $('#yeepdf-setup-template_id').val() == '') {
+            if ($('#yeepdf-setup-type').length && $('#yeepdf-setup-type').val() !== '') {
+                $( "#yeepdf-setup-template" ).dialog({
+                    modal: true,
+                    width: 800,
+                    title: "Setup",
+                    buttons: {
+                        OK: function() {
+                        $( this ).dialog( "close" );
+                        }
+                    }
+                });
+            }
+         }
 })
 })(jQuery);
