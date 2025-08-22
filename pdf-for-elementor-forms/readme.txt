@@ -3,7 +3,7 @@ Contributors: addonsorg
 Tags: pdf Elementor, Elementor form pdf, Elementor pdf, Elementor forms pdf
 Requires at least: 2.0
 Tested up to: 6.8
-Stable tag: 6.2.0
+Stable tag: 6.3.0
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html

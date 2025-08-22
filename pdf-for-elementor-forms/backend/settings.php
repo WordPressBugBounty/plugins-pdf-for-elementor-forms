@@ -7,7 +7,7 @@ class Yeepdf_Settings_Main {
 		add_action( 'admin_menu', array( $this, 'add_plugin_page' ) );
 		add_action( 'wp_ajax_pdfceator_remove_font', array($this,"remove_font"));
 		add_action( 'yeepdf_custom_sizes', array($this,"add_sizes"));
-		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
+		add_action( 'admin_init', array( $this, 'plugins_loaded' ) );
 		add_action( 'wp_ajax_yeepdf_dropbox_client_id_validate', [ $this, 'ajax_validate_api_token' ] );
 		add_action( "yeepdf_after_settings", array($this,"yeepdf_after_settings"),10);
 	}
@@ -26,9 +26,9 @@ class Yeepdf_Settings_Main {
 	}
 	function ajax_validate_api_token(){
 		check_ajax_referer( "yeepdf_dropbox", '_nonce' );
-        $clientId = sanitize_text_field($_POST['clientId']);
-        $clientSecret = sanitize_text_field($_POST['clientSecret']);
-        $authorizationCode = sanitize_text_field($_POST['authorizationCode']);
+        $clientId = sanitize_text_field(wp_unslash($_POST['clientId']));
+        $clientSecret = sanitize_text_field(wp_unslash($_POST['clientSecret']));
+        $authorizationCode = sanitize_text_field(wp_unslash($_POST['authorizationCode']));
         if ( ! isset( $_POST['clientId'] ) ) {
             wp_send_json_error();
         }
@@ -232,8 +232,8 @@ class Yeepdf_Settings_Main {
 		return $sizes;
 	}
 	function remove_font(){
-		$fontname = sanitize_text_field($_POST["font_name"]);
-		$type = sanitize_text_field($_POST["type"]);
+		$fontname = sanitize_text_field(wp_unslash($_POST["font_name"]));
+		$type = sanitize_text_field(wp_unslash($_POST["type"]));
 		$custom_fonts = get_option("pdf_custom_fonts",array());
 		unset($custom_fonts[$fontname]);
 		update_option("pdf_custom_fonts",$custom_fonts);
@@ -244,82 +244,79 @@ class Yeepdf_Settings_Main {
 		add_action( 'admin_init', array($this,'register_settings') );
 	}
 	function register_settings(){
-		register_setting( 'pdf_creator_font', 'pdf_creator_font' );
-		register_setting( 'pdf_creator_font', 'pdf_creator_save_pdf' );
-		register_setting( 'pdf_creator_font', 'pdf_creator_save_random' );
-		register_setting( 'pdf_creator_font', 'pdf_creator_save_folder' );
-		register_setting( 'pdf_creator_font', 'pdf_creator_dropbox_token' );
-		register_setting( 'pdf_creator_font', 'pdf_creator_dropbox_token_secret' );
-		register_setting( 'pdf_creator_font', 'pdf_creator_dropbox_access' );
+		register_setting( 'pdf_creator_font', 'pdf_creator_font',array(
+	        'type'              => 'string',
+	        'sanitize_callback' => 'sanitize_text_field',
+	    	));
+		register_setting( 'pdf_creator_font', 'pdf_creator_save_pdf',array(
+	        'type'              => 'string',
+	        'sanitize_callback' => 'sanitize_text_field',
+	    	));
+		register_setting( 'pdf_creator_font', 'pdf_creator_save_random',array(
+	        'type'              => 'string',
+	        'sanitize_callback' => 'sanitize_text_field',
+	    	) );
+		register_setting( 'pdf_creator_font', 'pdf_creator_save_folder',array(
+	        'type'              => 'string',
+	        'sanitize_callback' => 'sanitize_text_field',
+	    	) );
+			register_setting( 'pdf_creator_font', 'pdf_creator_dropbox_token',array(
+	        'type'              => 'string',
+	        'sanitize_callback' => 'sanitize_text_field',
+	    	) );
+			register_setting( 'pdf_creator_font', 'pdf_creator_dropbox_token_secret',array(
+	        'type'              => 'string',
+	        'sanitize_callback' => 'sanitize_text_field',
+	    	) );
+			register_setting( 'pdf_creator_font', 'pdf_creator_dropbox_access',array(
+	        'type'              => 'string',
+	        'sanitize_callback' => 'sanitize_text_field',
+	    	) );
 		$fonts = array("R"=>null,"B"=>null,"I"=>null,"BI"=>null);
 		if( isset($_POST['pdf_creator_papers'])) { 
-			register_setting( 'pdf_creator_font', 'pdf_creator_papers' );
+			register_setting( 'pdf_creator_font', 'pdf_creator_papers',array(
+		        'type'              => 'string',
+		        'sanitize_callback' => 'sanitize_textarea_field',
+		    	)  );
 		}			
-		//upload font
-		$upload_dir = wp_upload_dir();
-		$path_main = $upload_dir['basedir'] . '/pdfs/fonts/';  
-		$allowed = array('ttf'); 
-		if( isset($_FILES['pdf_creator_font_upload_regular'])) {
-				$files = $_FILES['pdf_creator_font_upload_regular'];
-				$file = $files["tmp_name"];
-				$filename = $files['name'];
-				$ext = pathinfo($filename, PATHINFO_EXTENSION);
-				if( $file !="" && in_array($ext, $allowed) ) {
-					$part = $path_main.$files['name'];
-					if ( ! file_exists( $path_main ) ) {
-			            wp_mkdir_p( $path_main );
-			        }
-			        if(file_exists($part)){
-					    unlink($part); 
-					} 
-					move_uploaded_file($file,$part); // phpcs:ignore WordPress.Security.NonceVerification
-					$fonts["R"] = $files['name'];
-				}
-		}
-		if( isset($_FILES['pdf_creator_font_upload_bold'])) {
-				$files = $_FILES['pdf_creator_font_upload_bold'];
-				$file = $files["tmp_name"];
-				$filename = $files['name'];
-				$ext = pathinfo($filename, PATHINFO_EXTENSION);
-				if( $file !="" && in_array($ext, $allowed) ) {
-					$part = $path_main.$files['name'];
-					if(file_exists($part)){
-					    unlink($part); 
-					} 
-					move_uploaded_file($file,$part); // phpcs:ignore WordPress.Security.NonceVerification
-					$fonts["B"] = $files['name'];
-				}
-		}
-		if( isset($_FILES['pdf_creator_font_upload_italic'])) {
-				$files = $_FILES['pdf_creator_font_upload_italic'];
-				$file = $files["tmp_name"];
-				$filename = $files['name'];
-				$ext = pathinfo($filename, PATHINFO_EXTENSION);
-				if( $file !="" && in_array($ext, $allowed) ) {
-					$part = $path_main.$files['name'];
-					if(file_exists($part)){
-					    unlink($part); 
-					} 
-					move_uploaded_file($file,$part); // phpcs:ignore WordPress.Security.NonceVerification
-					$fonts["I"] = $files['name'];
-				}
-		}
-		if( isset($_FILES['pdf_creator_font_upload_bold_italic'])) {
-				$files = $_FILES['pdf_creator_font_upload_bold_italic'];
-				$file = $files["tmp_name"];
-				$filename = $files['name'];
-				$ext = pathinfo($filename, PATHINFO_EXTENSION);
-				if( $file !="" && in_array($ext, $allowed) ) {
-					$part = $path_main.$files['name'];
-					if(file_exists($part)){
-					    unlink($part); 
-					} 
-					move_uploaded_file($file,$part); // phpcs:ignore WordPress.Security.NonceVerification
-					$fonts["BI"] = $files['name'];
-				}
-		}
+		// Handle font uploads
+		if (!current_user_can('manage_options')) {
+	        return;
+	    }
+	    $upload_dir = wp_upload_dir();
+	    $fonts_dir  = trailingslashit( $upload_dir['basedir'] ) . 'pdfs/fonts/';
+	    $allowed_exts = array( 'ttf' );
+	    $fonts = array( "R" => null, "B" => null, "I" => null, "BI" => null );
+	    $font_fields = array(
+	        'pdf_creator_font_upload_regular'      => 'R',
+	        'pdf_creator_font_upload_bold'         => 'B',
+	        'pdf_creator_font_upload_italic'       => 'I',
+	        'pdf_creator_font_upload_bold_italic'  => 'BI',
+	    );
+	    foreach ( $font_fields as $input_key => $style_key ) {
+	        if ( isset( $_FILES[ $input_key ] ) && ! empty( $_FILES[ $input_key ]['tmp_name'] ) ) {
+	            $file = $_FILES[ $input_key ];
+	            $filename = sanitize_file_name( $file['name'] );
+	            $ext = strtolower( pathinfo( $filename, PATHINFO_EXTENSION ) );
+	            $tmp = $file['tmp_name'];
+	            $mime = mime_content_type( $tmp );
+	            // Validate by extension and mime type
+	            if ( in_array( $ext, $allowed_exts, true ) &&( strpos( $mime, 'font' ) !== false || $mime === 'application/x-font-ttf' ) ) {
+	                if ( ! file_exists( $fonts_dir ) ) {
+	                    wp_mkdir_p( $fonts_dir );
+	                }
+	                $dest = $fonts_dir . $filename;
+	                if ( file_exists( $dest ) ) {
+	                    unlink( $dest );
+	                }
+	                if ( move_uploaded_file( $tmp, $dest ) ) {
+	                    $fonts[ $style_key ] = $filename;
+	                }
+	            }
+	        }
+	    }
 		if( $fonts["R"] && $_POST['pdf_creator_font_name'] != "" ) {
-			$name = sanitize_text_field($_POST['pdf_creator_font_name']);
+			$name = sanitize_text_field(wp_unslash($_POST['pdf_creator_font_name']));
 			$name = strtolower($name);
 			$name = preg_replace('/[^a-z]/', '', $name);
 			$custom_fonts = get_option("pdf_custom_fonts",array());

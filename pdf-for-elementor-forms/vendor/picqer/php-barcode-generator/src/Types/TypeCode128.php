@@ -155,8 +155,12 @@ class TypeCode128 implements TypeInterface
 
         // length of the code
         $len = strlen($code);
-
-        switch (strtoupper($this->type)) {
+        if (empty($this->type)) {
+            $custom_type = "";
+        }else{
+            $custom_type = $this->type;
+        }
+        switch (strtoupper($custom_type)) {
             case 'A':
                 $startid = 103;
                 for ($i = 0; $i < $len; ++$i) {

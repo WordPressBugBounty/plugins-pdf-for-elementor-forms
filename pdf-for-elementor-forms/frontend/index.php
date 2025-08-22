@@ -296,7 +296,7 @@ class Yeepdf_Create_PDF {
 				update_option( "pdf_download_last", $url_name);
 				$dropbox_token = get_option("pdf_creator_dropbox_token","");
 				if($dropbox_token != "" && $data_attrs["save_dropbox"] ){
-					Yeepdf_Dropbox_API::uppload_files($path_name,$data_attrs["name"].".pdf",);
+					Yeepdf_Dropbox_API::uppload_files($path_name,$data_attrs["name"].".pdf");
 				}
 				do_action( "yeepdf_after_save_pdf",$path_name,$url_name );
 				return array("path"=>$path_name,"url"=>$url_name);

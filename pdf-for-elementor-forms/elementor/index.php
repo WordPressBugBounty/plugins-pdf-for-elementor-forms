@@ -544,6 +544,9 @@ class Yeepdf_Creator_form_widget_Backend {
 					if ( ( 'textarea' === $field['type'] ) && ( '<br>' === $line_break ) ) {
 						$formatted["value"] = str_replace( [ "\r\n", "\n", "\r" ], '<br />', $formatted["value"] );
 					}
+					if( $field["type"] == "signature"){
+						$formatted["value"] = '<img src="'.$formatted["value"].'" style="max-width: 100%;height: auto;" />';
+					}
 					if($i == 0){
 						$text .= '<tr>
 						<td style="'.$style_first.'"><strong>'.$formatted["title"].'</strong></td>
