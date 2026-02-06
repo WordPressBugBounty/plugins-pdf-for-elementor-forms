@@ -2,8 +2,8 @@
 Contributors: addonsorg
 Tags: pdf Elementor, Elementor form pdf, Elementor pdf, Elementor forms pdf
 Requires at least: 2.0
-Tested up to: 6.8
-Stable tag: 6.3.0
+Tested up to: 6.9
+Stable tag: 6.5.1
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -51,7 +51,7 @@ A multitude of languages from across the globe can be displayed in PDFs, include
 
 == PRO VERSION ==
 * Table Customization
-* QRcode Supports
+* Yeekitqrcode Supports
 * Barcode Supports
 * Watermarks Supports
 * Header Supports
@@ -77,6 +77,12 @@ Document: <https://pdf.add-ons.org/document/>
 
 
 == Changelog ==
+= 6.5.1 =
+- Fixed: PHP Object Injection
+
+= 6.3.1 =
+- Added: Select emails to attach to the email.
+
 = 6.2.0 =
 - Added:  Installation wizard template
 
@@ -104,7 +110,7 @@ Document: <https://pdf.add-ons.org/document/>
 - Added: Preview entry in editor
 
 = 4.9.0 =
-- Fixed: Check class_exists('QRcode')
+- Fixed: Check class_exists('Yeekitqrcode')
 - Added: Hook yeepdf_format_br
 - Added: Show preview entry in enditor
 

@@ -1,4 +1,5 @@
 <?php
+if (! defined('ABSPATH')) exit; // Exit if accessed directly
 use Elementor\Plugin;
 use ElementorPro\Core\Utils\Collection;
 use ElementorPro\Modules\Forms\Fields\Upload;
@@ -6,6 +7,7 @@ class Yeepdf_Creator_form_widget_Backend {
 	private $attachments_array = array();
 	private $submission_pdf = array();
 	private $pdf_id = "";
+	private $attachments_list_array = array();
 	function __construct(){
 		add_filter("yeepdf_shortcodes",array($this,"add_shortcode"));
 		add_action("yeepdf_head_settings",array($this,"add_head_settings"));
@@ -359,13 +361,21 @@ class Yeepdf_Creator_form_widget_Backend {
 			$template = $record->get_form_settings( $this->get_control_id("template_pdf"));
 			if( $send_status ==  true && $template != ""){
 				$show_id = $record->get_form_settings( $this->get_control_id('pdf_name_show_id'));
-				$attach_email_pdf = $record->get_form_settings( $this->get_control_id('attach_email_pdf'));
+				$attach_email_pdf_list = $record->get_form_settings( $this->get_control_id('attach_email_pdf_list'));
+				$attach_email_pdf_list = $record->replace_setting_shortcodes( $attach_email_pdf_list );
+    			$attach_email_pdf_list = $this->replace_setting_shortcodes( $attach_email_pdf_list, $form_data );
 				$name = $record->get_form_settings( $this->get_control_id('name_pdf'));
 				$password = $record->get_form_settings( $this->get_control_id('password_pdf'));
 				$save_dropbox = $record->get_form_settings( $this->get_control_id('save_dropbox'));
 				$check_attach = $record->get_form_settings( $this->get_control_id('attach_email_pdf'));
 				if( $template != "" && $template > 0) {
 					$folder_uploads = $this->add_pdf($name,$show_id,$password,$template,$form_data,$record,$save_dropbox);
+					if($attach_email_pdf_list != ""){
+						$attach_email_pdf_list = array_map('trim', explode(',', $attach_email_pdf_list));
+						foreach($attach_email_pdf_list as $email){
+							$this->attachments_list_array[] = $email;
+						}
+					}
 					//Get submit Submission id
 					$this->submission_pdf = array($folder_uploads["url"]);
 					if($check_attach == "yes"){
@@ -429,22 +439,6 @@ class Yeepdf_Creator_form_widget_Backend {
 		}else{
 			$save_dropbox = false;
     	}
-    	if (preg_match('/\[yeepdf_images(?:\s+width="(\d+)")?(?:\s+height="(\d+)")?\](.*?)\[\/yeepdf_images\]/', $message, $matches)) {
-    		$width = !empty($matches[1]) ? $matches[1] : "auto"; 
-			$height = !empty($matches[2]) ? $matches[2] : "auto";
-		    $imageUrls = explode(",", $matches[3]);
-			if(is_numeric($height) ){
-				$height .= "px";
-			}
-			if(is_numeric($width) ){
-				$width .= "px";
-			}
-		    $imagesHtml = "";
-		    foreach ($imageUrls as $url) {
-		        $imagesHtml .= "<img src='$url' width='$width' height='$height' > ";
-		    }
-		    $message = str_replace($matches[0], $imagesHtml, $message);
-		}
 		if($name == ""){
 			$name = rand(100,999)."-form-name";
 		}
@@ -457,6 +451,7 @@ class Yeepdf_Creator_form_widget_Backend {
     		"password" =>$password,
     		"save_dropbox" =>$save_dropbox,
     	);
+		$data_send_settings_download = apply_filters("pdf_before_render_datas",$data_send_settings_download);
     	$folder_uploads =Yeepdf_Create_PDF::pdf_creator_preview($data_send_settings_download);
     	return array("name"=>$name,"path"=>$folder_uploads["path"],"url"=>$folder_uploads["url"]);
 	}
@@ -520,9 +515,10 @@ class Yeepdf_Creator_form_widget_Backend {
 	}
 	public function wp_mail( $args ) {
 		$old_attachments = $args['attachments'];
-		$mail_list = apply_filters("yeepdf_attached_list",array());
-		if(count($mail_list) > 0 ) {
-			 if(is_array($args["to"],$mail_list)){
+		$mail_list = $this->attachments_list_array;
+		$mail_list = apply_filters("yeepdf_attached_list",$mail_list);
+		if(is_array($mail_list) && count($mail_list) > 0 ) {
+			 if(in_array($args["to"],$mail_list)){
 			 	$args['attachments'] = array_merge( $this->attachments_array, $old_attachments );
 			 }
 		}else{

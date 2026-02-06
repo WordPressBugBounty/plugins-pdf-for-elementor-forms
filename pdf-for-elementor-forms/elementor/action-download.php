@@ -1,7 +1,5 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
-}
+if (! defined('ABSPATH')) exit; // Exit if accessed directly
 use Elementor\Controls_Manager;
 /**
  * Elementor form ping action.

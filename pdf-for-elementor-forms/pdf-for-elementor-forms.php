@@ -5,14 +5,15 @@
  * Plugin URI: https://add-ons.org/plugin/elementor-form-pdf-generator-attachment/
  * Requires Plugins: elementor
  * Author: add-ons.org
- * Version: 6.3.0
+ * Version: 6.5.1
  * Requires PHP: 5.6
- * Elementor tested up to: 3.29
- * Elementor pro tested up to: 3.29
+ * Elementor tested up to: 3.34
+ * Elementor pro tested up to: 3.34
  * Author URI: https://add-ons.org/
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
 */
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 if (!defined('YEEPDF_ELEMENTOR_PDF_PLUGIN_PATH')) {
     define( 'YEEPDF_ELEMENTOR_PDF_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
     define( 'YEEPDF_ELEMENTOR_PDF_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -26,6 +27,9 @@ if (!defined('YEEPDF_ELEMENTOR_PDF_PLUGIN_PATH')) {
         }
         class Yeepdf_Creator_Builder {
             function __construct(){
+                if (!class_exists('Yeekitqrcode')) {
+                    include_once YEEPDF_CREATOR_BUILDER_PATH."libs/phpqrcode.php";
+                }
                 $dir = new RecursiveDirectoryIterator(YEEPDF_CREATOR_BUILDER_PATH."backend");
                 $ite = new RecursiveIteratorIterator($dir);
                 $files = new RegexIterator($ite, "/\.php/", RegexIterator::MATCH);
@@ -33,9 +37,6 @@ if (!defined('YEEPDF_ELEMENTOR_PDF_PLUGIN_PATH')) {
                     if (!$file->isDir()){
                         require_once $file->getPathname();
                     }
-                }
-                if (!class_exists('QRcode')) {
-                    include_once YEEPDF_CREATOR_BUILDER_PATH."libs/phpqrcode.php";
                 }
                 include_once YEEPDF_CREATOR_BUILDER_PATH."frontend/index.php";
             }
