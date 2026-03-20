@@ -381,6 +381,7 @@
       var show_class_container = wp_builder_pdf["block"][type]["editor"]["container"]["show"];
       var style_container_element = wp_builder_pdf["block"][type]["editor"]["container"]["style"];
       var attr_container_element = wp_builder_pdf["block"][type]["editor"]["container"]["attr"];
+
       //Show eidtor
       $.each(show_class_container, function (key, value) {
         $(".builder__editor--item-" + value).removeClass("hidden");
@@ -396,6 +397,7 @@
         }
         $.yeepdf_set_css_editor(value, key, data, builder);
       });
+
       $.each(attr_container_element, function (key, value) {
         var data = builder.attr(value);
         var type = $(key).attr("type");
@@ -416,6 +418,7 @@
       if (!row) {
         var attr_inner_element = wp_builder_pdf["block"][type]["editor"]["inner"]["attr"];
         var style_inner_element = wp_builder_pdf["block"][type]["editor"]["inner"]["style"];
+
         //set editor in element style
         $.each(style_inner_element, function (key, value) {
           $.each(value, function (index, style) {
@@ -502,7 +505,7 @@
               case "value_radio":
                 let value_check = "";
                 let i_c = 0;
-                $(builder.find(".yeepdf_checkbox_container input")).each(function () {
+                $(builder.find(".yeepdf_checkbox_container input, .yeepdf_radio_container input")).each(function () {
                   if (i_c == 0) {
                     value_check += $(this).val();
                   } else {
@@ -690,6 +693,9 @@
       return img
     }
     $.yeepdf_set_css_editor = function (style, index, data, builder) {
+      if (style === undefined) {
+        return;
+      }
       switch (style) {
         case "border-color":
         case "background-color":
@@ -712,7 +718,7 @@
             var data1 = builder.find("img")[0].style.width;
           } else {
             //text
-            if (builder.find(".text-content")[0].style.width === undefined) {
+            if (builder.find(".text-content")[0]?.style?.width === undefined) {
               var data1 = "100%";
             } else {
               var data1 = builder.find(".text-content")[0].style.width;
@@ -733,7 +739,7 @@
             var data1 = builder.find("img")[0].style.height;
           } else {
             //text
-            if (builder.find(".text-content")[0].style.height === undefined) {
+            if (builder.find(".text-content")[0]?.style?.width === undefined) {
               var data1 = "auto";
             } else {
               var data1 = builder.find(".text-content")[0].style.height;
