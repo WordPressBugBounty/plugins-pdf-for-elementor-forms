@@ -1,6 +1,7 @@
 <?php
 if (! defined('ABSPATH')) exit; // Exit if accessed directly
 use Elementor\Controls_Manager;
+
 /**
  * Elementor form ping action.
  *
@@ -35,7 +36,7 @@ class Superaddons_Pdf_Action_After_Submit extends \ElementorPro\Modules\Forms\Cl
 	 */
 	public function get_label()
 	{
-		return esc_html__('PDF', 'elementor-forms-ping-action');
+		return esc_html__('PDF', 'pdf-for-elementor-forms');
 	}
 	protected function get_control_id($control_id)
 	{
@@ -48,24 +49,24 @@ class Superaddons_Pdf_Action_After_Submit extends \ElementorPro\Modules\Forms\Cl
 	public function register_settings_section($widget)
 	{
 		$options_logic = array(
-			"==" => esc_html__("is", "conditional-logic-for-elementor-forms"),
-			"!=" => esc_html__("not is", "conditional-logic-for-elementor-forms"),
-			"e" => esc_html__("empty", "conditional-logic-for-elementor-forms"),
-			"!e" => esc_html__("not empty", "conditional-logic-for-elementor-forms"),
-			"c" => esc_html__("contains", "conditional-logic-for-elementor-forms"),
-			"!c" => esc_html__("does not contain", "conditional-logic-for-elementor-forms"),
-			"^" => esc_html__("starts with", "conditional-logic-for-elementor-forms"),
-			"~" => esc_html__("ends with", "conditional-logic-for-elementor-forms"),
-			">" => esc_html__("greater than", "conditional-logic-for-elementor-forms"),
-			"<" => esc_html__("less than", "conditional-logic-for-elementor-forms"),
-			"array" => esc_html__("list array (a,b,c)", "conditional-logic-for-elementor-forms"),
-			"!array" => esc_html__("not list array (a,b,c)", "conditional-logic-for-elementor-forms"),
-			"array_contain" => esc_html__("list array contain (a,b,c)", "conditional-logic-for-elementor-forms"),
-			"!array_contain" => esc_html__("not list array contain (a,b,c)", "conditional-logic-for-elementor-forms"),
+			"==" => esc_html__("is", "pdf-for-elementor-forms"),
+			"!=" => esc_html__("not is", "pdf-for-elementor-forms"),
+			"e" => esc_html__("empty", "pdf-for-elementor-forms"),
+			"!e" => esc_html__("not empty", "pdf-for-elementor-forms"),
+			"c" => esc_html__("contains", "pdf-for-elementor-forms"),
+			"!c" => esc_html__("does not contain", "pdf-for-elementor-forms"),
+			"^" => esc_html__("starts with", "pdf-for-elementor-forms"),
+			"~" => esc_html__("ends with", "pdf-for-elementor-forms"),
+			">" => esc_html__("greater than", "pdf-for-elementor-forms"),
+			"<" => esc_html__("less than", "pdf-for-elementor-forms"),
+			"array" => esc_html__("list array (a,b,c)", "pdf-for-elementor-forms"),
+			"!array" => esc_html__("not list array (a,b,c)", "pdf-for-elementor-forms"),
+			"array_contain" => esc_html__("list array contain (a,b,c)", "pdf-for-elementor-forms"),
+			"!array_contain" => esc_html__("not list array contain (a,b,c)", "pdf-for-elementor-forms"),
 		);
 		$pdf_templates = get_posts(array('post_type' => 'yeepdf', 'post_status' => 'publish', 'numberposts' => -1));
 		$templates = array();
-		$templates[0] = esc_html__("Choose Template", 'crm-marketing');
+		$templates[0] = esc_html__("Choose Template", 'pdf-for-elementor-forms');
 		foreach ($pdf_templates as $pdf_template) {
 			$id = $pdf_template->ID;
 			$templates[$id] = "(" . $id . ") " . $pdf_template->post_title;
@@ -92,7 +93,7 @@ class Superaddons_Pdf_Action_After_Submit extends \ElementorPro\Modules\Forms\Cl
 		$widget->add_control(
 			$this->get_control_id('name_pdf'),
 			[
-				'label' => esc_html__('PDF Name', 'elementor-forms-sendy-action'),
+				'label' => esc_html__('PDF Name', 'pdf-for-elementor-forms'),
 				'type' => Controls_Manager::TEXT,
 				'description' => esc_html__('To customize sent fields, copy the shortcode that appears inside each field and paste it above. e.g: [field id="name"]', 'pdf-for-elementor-forms'),
 			]
@@ -123,12 +124,12 @@ class Superaddons_Pdf_Action_After_Submit extends \ElementorPro\Modules\Forms\Cl
 					$this->get_control_id('attach_email_pdf') => "yes",
 				],
 				'description' => esc_html__('To customize the filed, copy the shortcode that appears inside each field and paste it above. e.g: [field id="name"] or use email', 'pdf-for-elementor-forms'),
-			
+
 			]
 		);
 		$des_dropbox = sprintf(
 			/* translators: 1: Integration label, 2: Link opening tag, 3: Link closing tag. */
-			esc_html__('Set your %1$s in the %2$sIntegrations Settings%3$s.', 'pdf-for-gravityforms'),
+			esc_html__('Set your %1$s in the %2$sIntegrations Settings%3$s.', 'pdf-for-elementor-forms'),
 			"Dropbox API",
 			sprintf('<a href="%s" target="_blank">', admin_url("edit.php?post_type=yeepdf&page=yeepdf-settings")),
 			'</a>'
@@ -139,7 +140,7 @@ class Superaddons_Pdf_Action_After_Submit extends \ElementorPro\Modules\Forms\Cl
 				'label' => esc_html__('Save PDF to Dropbox', 'pdf-for-elementor-forms'),
 				'type' => Controls_Manager::SWITCHER,
 				'return_value' => 'yes',
-				'description' => esc_html__("Save this pdf to dropbox. ", "pdf-for-gravityforms") . $des_dropbox,
+				'description' => esc_html__("Save this pdf to dropbox. ", "pdf-for-elementor-forms") . $des_dropbox,
 			]
 		);
 		if (!class_exists("Superaddons_Elementor_Conditional_logic_Init", false)) {
@@ -158,7 +159,7 @@ class Superaddons_Pdf_Action_After_Submit extends \ElementorPro\Modules\Forms\Cl
 			$widget->add_control(
 				$control_id_conditional_logic,
 				[
-					'label' => esc_html__('Enable Conditional Logic', 'elementor-pro'),
+					'label' => esc_html__('Enable Conditional Logic', 'pdf-for-elementor-forms'),
 					'render_type' => 'none',
 					'type' => Controls_Manager::SWITCHER,
 				]
@@ -166,15 +167,15 @@ class Superaddons_Pdf_Action_After_Submit extends \ElementorPro\Modules\Forms\Cl
 			$widget->add_control(
 				$this->get_control_id('pdf_conditional_logic_display'),
 				[
-					'label' => esc_html__('Display mode', "conditional-logic-for-elementor-forms"),
+					'label' => esc_html__('Display mode', "pdf-for-elementor-forms"),
 					'type' => Controls_Manager::CHOOSE,
 					'options' => [
 						'show' => [
-							'title' => esc_html__('Create if', "conditional-logic-for-elementor-forms"),
+							'title' => esc_html__('Create if', "pdf-for-elementor-forms"),
 							'icon' => 'fa fa-eye',
 						],
 						'hide' => [
-							'title' => esc_html__('Disable if', "conditional-logic-for-elementor-forms"),
+							'title' => esc_html__('Disable if', "pdf-for-elementor-forms"),
 							'icon' => 'fa fa-eye-slash',
 						],
 					],
@@ -187,7 +188,7 @@ class Superaddons_Pdf_Action_After_Submit extends \ElementorPro\Modules\Forms\Cl
 			$widget->add_control(
 				$this->get_control_id('pdf_conditional_logic_trigger'),
 				[
-					'label' => esc_html__('When to Trigger', "conditional-logic-for-elementor-forms"),
+					'label' => esc_html__('When to Trigger', "pdf-for-elementor-forms"),
 					'type' => Controls_Manager::SELECT,
 					'options' => [
 						"ALL" => "ALL",
@@ -203,19 +204,19 @@ class Superaddons_Pdf_Action_After_Submit extends \ElementorPro\Modules\Forms\Cl
 				$this->get_control_id('pdf_conditional_logic_datas'),
 				[
 					'name'           => 'pdf_conditional_logic_datas',
-					'label'          => esc_html__('Fields if', "conditional-logic-for-elementor-forms"),
+					'label'          => esc_html__('Fields if', "pdf-for-elementor-forms"),
 					'type'           => 'conditional_logic_repeater',
 					'fields'         => [
 						[
 							'name' => 'conditional_logic_id',
-							'label' => esc_html__('Field ID', "conditional-logic-for-elementor-forms"),
+							'label' => esc_html__('Field ID', "pdf-for-elementor-forms"),
 							'type' => Controls_Manager::TEXT,
 							'label_block' => true,
 							'default' => '',
 						],
 						[
 							'name' => 'conditional_logic_operator',
-							'label' => esc_html__('Operator', "conditional-logic-for-elementor-forms"),
+							'label' => esc_html__('Operator', "pdf-for-elementor-forms"),
 							'type' => Controls_Manager::SELECT,
 							'label_block' => true,
 							'options' => $options_logic,
@@ -223,7 +224,7 @@ class Superaddons_Pdf_Action_After_Submit extends \ElementorPro\Modules\Forms\Cl
 						],
 						[
 							'name' => 'conditional_logic_value',
-							'label' => esc_html__('Value to compare', "conditional-logic-for-elementor-forms"),
+							'label' => esc_html__('Value to compare', "pdf-for-elementor-forms"),
 							'type' => Controls_Manager::TEXT,
 							'label_block' => true,
 							'default' => '',
@@ -257,7 +258,7 @@ class Superaddons_Pdf2_Action_After_Submit extends Superaddons_Pdf_Action_After_
 	}
 	public function get_label()
 	{
-		return esc_html__('PDF 2', 'elementor-forms-ping-action');
+		return esc_html__('PDF 2', 'pdf-for-elementor-forms');
 	}
 	protected function get_title()
 	{
@@ -278,7 +279,7 @@ class Superaddons_Pdf3_Action_After_Submit extends Superaddons_Pdf2_Action_After
 	}
 	public function get_label()
 	{
-		return esc_html__('PDF 3', 'elementor-forms-ping-action');
+		return esc_html__('PDF 3', 'pdf-for-elementor-forms');
 	}
 	protected function get_title()
 	{
@@ -299,7 +300,7 @@ class Superaddons_Pdf4_Action_After_Submit extends Superaddons_Pdf2_Action_After
 	}
 	public function get_label()
 	{
-		return esc_html__('PDF 4', 'elementor-forms-ping-action');
+		return esc_html__('PDF 4', 'pdf-for-elementor-forms');
 	}
 	protected function get_title()
 	{
@@ -320,7 +321,7 @@ class Superaddons_Pdf5_Action_After_Submit extends Superaddons_Pdf2_Action_After
 	}
 	public function get_label()
 	{
-		return esc_html__('PDF 5', 'elementor-forms-ping-action');
+		return esc_html__('PDF 5', 'pdf-for-elementor-forms');
 	}
 	protected function get_title()
 	{
@@ -341,7 +342,7 @@ class Superaddons_Pdf6_Action_After_Submit extends Superaddons_Pdf2_Action_After
 	}
 	public function get_label()
 	{
-		return esc_html__('PDF 6', 'elementor-forms-ping-action');
+		return esc_html__('PDF 6', 'pdf-for-elementor-forms');
 	}
 	protected function get_title()
 	{
@@ -362,7 +363,7 @@ class Superaddons_Pdf7_Action_After_Submit extends Superaddons_Pdf2_Action_After
 	}
 	public function get_label()
 	{
-		return esc_html__('PDF 7', 'elementor-forms-ping-action');
+		return esc_html__('PDF 7', 'pdf-for-elementor-forms');
 	}
 	protected function get_title()
 	{
@@ -383,7 +384,7 @@ class Superaddons_Pdf8_Action_After_Submit extends Superaddons_Pdf2_Action_After
 	}
 	public function get_label()
 	{
-		return esc_html__('PDF 8', 'elementor-forms-ping-action');
+		return esc_html__('PDF 8', 'pdf-for-elementor-forms');
 	}
 	protected function get_title()
 	{
@@ -404,7 +405,7 @@ class Superaddons_Pdf9_Action_After_Submit extends Superaddons_Pdf2_Action_After
 	}
 	public function get_label()
 	{
-		return esc_html__('PDF 9', 'elementor-forms-ping-action');
+		return esc_html__('PDF 9', 'pdf-for-elementor-forms');
 	}
 	protected function get_title()
 	{
@@ -425,7 +426,7 @@ class Superaddons_Pdf10_Action_After_Submit extends Superaddons_Pdf2_Action_Afte
 	}
 	public function get_label()
 	{
-		return esc_html__('PDF 10', 'elementor-forms-ping-action');
+		return esc_html__('PDF 10', 'pdf-for-elementor-forms');
 	}
 	protected function get_title()
 	{

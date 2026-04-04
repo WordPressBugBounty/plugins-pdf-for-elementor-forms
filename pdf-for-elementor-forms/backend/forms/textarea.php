@@ -13,7 +13,8 @@ class Yeepdf_Settings_Builder_PDF_Forms_Textarea
         <li>
             <div class="momongaDraggable" data-type="form_textarea">
                 <i class="dashicons dashicons-button"></i>
-                <div class="yeepdf-tool-text"><?php esc_html_e("Textarea", 'pdf-for-woocommerce') ?></div>
+                <div class="yeepdf-tool-text"><?php esc_html_e("Textarea", 'pdf-for-woocommerce'); //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch 
+                                                ?></div>
             </div>
         </li>
 <?php

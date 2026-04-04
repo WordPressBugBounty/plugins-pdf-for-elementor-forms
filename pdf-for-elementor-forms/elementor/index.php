@@ -3,6 +3,7 @@ if (! defined('ABSPATH')) exit; // Exit if accessed directly
 use Elementor\Plugin;
 use ElementorPro\Core\Utils\Collection;
 use ElementorPro\Modules\Forms\Fields\Upload;
+
 class Yeepdf_Creator_form_widget_Backend
 {
 	private $attachments_array = array();
@@ -132,16 +133,16 @@ class Yeepdf_Creator_form_widget_Backend
 	function builder_shortcode($shortcodes)
 	{
 		global $post, $wpdb;
-		if ((isset($post->post_type) && $post->post_type == "yeepdf") || (isset($_GET["post_type"]) && $_GET["post_type"] == "yeepdf")) {
+		if ((isset($post->post_type) && $post->post_type == "yeepdf") || (isset($_GET["post_type"]) && $_GET["post_type"] == "yeepdf")) { //phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$id_entry = "";
 			if (isset($post->ID)) {
 				$id_entry = get_post_meta($post->ID, '_pdfcreator_formwidget_entry', true);
 			}
 			if ($id_entry != "" && $id_entry != 0) {
 				$table_e_submissions_vl = $wpdb->prefix . "e_submissions_values";
-				$results = $wpdb->get_results(
+				$results = $wpdb->get_results( //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 					$wpdb->prepare(
-						"SELECT * FROM $table_e_submissions_vl WHERE submission_id = %d",
+						"SELECT * FROM $table_e_submissions_vl WHERE submission_id = %d", //phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 						$id_entry
 					),
 					ARRAY_A
@@ -161,9 +162,9 @@ class Yeepdf_Creator_form_widget_Backend
 		if ($id_entry != "" && $id_entry != 0) {
 			$shortcodes = array();
 			$table_e_submissions_vl = $wpdb->prefix . "e_submissions_values";
-			$results = $wpdb->get_results(
+			$results = $wpdb->get_results( //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 				$wpdb->prepare(
-					"SELECT * FROM $table_e_submissions_vl WHERE submission_id = %d",
+					"SELECT * FROM $table_e_submissions_vl WHERE submission_id = %d", //phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 					$id_entry
 				),
 				ARRAY_A
@@ -179,16 +180,16 @@ class Yeepdf_Creator_form_widget_Backend
 	{
 		global $wpdb;
 		$table_e_submissions = $wpdb->prefix . "e_submissions";
-		$form_ids = sanitize_text_field($_POST["form_ids"]);
+		$form_ids = sanitize_text_field(wp_unslash($_POST["form_ids"])); //phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 		$form_ids_a = explode("-", $form_ids);
 		if (count($form_ids_a) < 2) {
 			die();
 		}
 		$id_form = $form_ids_a["0"];
 		//$id_form = "a005665";
-		$results = $wpdb->get_results(
+		$results = $wpdb->get_results( //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 			$wpdb->prepare(
-				"SELECT id,created_at FROM $table_e_submissions WHERE element_id = %s AND type = %s ORDER BY id DESC LIMIT 20",
+				"SELECT id,created_at FROM $table_e_submissions WHERE element_id = %s AND type = %s ORDER BY id DESC LIMIT 20", //phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				$id_form,
 				"submission"
 			),
@@ -209,7 +210,7 @@ class Yeepdf_Creator_form_widget_Backend
 	{
 		global $post;
 		$add_libs = false;
-		if ((isset($post->post_type) && $post->post_type == "yeepdf") || (isset($_GET["post_type"]) && $_GET["post_type"] == "yeepdf")) {
+		if ((isset($post->post_type) && $post->post_type == "yeepdf") || (isset($_GET["post_type"]) && $_GET["post_type"] == "yeepdf")) { //phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$add_libs = true;
 		}
 		$add_libs = apply_filters("yeepdf_add_libs", $add_libs);
@@ -456,7 +457,7 @@ class Yeepdf_Creator_form_widget_Backend
 		$content = $record->replace_setting_shortcodes($content);
 		$content = $this->replace_setting_shortcodes($content, $form_data);
 		$message = $this->replace_content_shortcodes($content, $record, '<br>');
-		$message = apply_filters('elementor_pro/forms/wp_mail_message', $message);
+		$message = apply_filters('elementor_pro/forms/wp_mail_message', $message); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		if ($save_dropbox == "yes") {
 			$save_dropbox = true;
 		} else {
@@ -474,7 +475,7 @@ class Yeepdf_Creator_form_widget_Backend
 			"password" => $password,
 			"save_dropbox" => $save_dropbox,
 		);
-		$data_send_settings_download = apply_filters("pdf_before_render_datas", $data_send_settings_download);
+		$data_send_settings_download = apply_filters("pdf_before_render_datas", $data_send_settings_download); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		$folder_uploads = Yeepdf_Create_PDF::pdf_creator_preview($data_send_settings_download);
 		return array("name" => $name, "path" => $folder_uploads["path"], "url" => $folder_uploads["url"]);
 	}
@@ -499,9 +500,9 @@ class Yeepdf_Creator_form_widget_Backend
 		global $wpdb;
 		$table_e_submissions = $wpdb->prefix . "e_submissions";
 		if (!$form_id) {
-			$datas = $wpdb->get_row("SELECT * FROM $table_e_submissions ORDER BY id DESC", ARRAY_A);
+			$datas = $wpdb->get_row("SELECT * FROM $table_e_submissions ORDER BY id DESC", ARRAY_A); //phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		} else {
-			$datas = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_e_submissions WHERE element_id = %s ORDER BY id DESC", $form_id), ARRAY_A);
+			$datas = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_e_submissions WHERE element_id = %s ORDER BY id DESC", $form_id), ARRAY_A); //phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		}
 		if (isset($datas["id"])) {
 			return $datas["id"];
@@ -513,7 +514,7 @@ class Yeepdf_Creator_form_widget_Backend
 	{
 		global $wpdb;
 		$table_e_submissions_meta = $wpdb->prefix . "e_submissions_values";
-		$wpdb->insert(
+		$wpdb->insert( //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$table_e_submissions_meta,
 			array(
 				'submission_id' => $submission_id,
@@ -623,7 +624,7 @@ class Yeepdf_Creator_form_widget_Backend
 	function get_list_forms()
 	{
 		global $wpdb;
-		$lists_form = $wpdb->get_results("SELECT $wpdb->postmeta.meta_value, $wpdb->posts.ID, $wpdb->posts.post_title FROM $wpdb->postmeta INNER JOIN $wpdb->posts ON $wpdb->posts.ID = $wpdb->postmeta.post_id  WHERE $wpdb->postmeta.meta_key = '_elementor_data'  AND $wpdb->posts.post_status = 'publish'");
+		$lists_form = $wpdb->get_results("SELECT $wpdb->postmeta.meta_value, $wpdb->posts.ID, $wpdb->posts.post_title FROM $wpdb->postmeta INNER JOIN $wpdb->posts ON $wpdb->posts.ID = $wpdb->postmeta.post_id  WHERE $wpdb->postmeta.meta_key = '_elementor_data'  AND $wpdb->posts.post_status = 'publish'"); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		return $lists_form;
 	}
 	private function find_elementor_forms($elements, $post_id, &$found_forms)
@@ -663,7 +664,7 @@ class Yeepdf_Creator_form_widget_Backend
 		?>
 		<div class="yeepdf-testting-order">
 			<select name="pdfcreator_formwidget" class="builder_pdf_woo_testing pdfcreator_formwidget">
-				<option value="-1"><?php esc_html_e("---Elementor Form---", "pdf-for-elementor") ?></option>
+				<option value="-1"><?php esc_html_e("---Elementor Form---", "pdf-for-elementor-forms") ?></option>
 				<?php foreach ($all_forms as $form) : ?>
 					<option value="<?php echo esc_attr($form['id']); ?>" <?php selected($current_form_id, $form['id']); ?>>
 						<?php echo esc_html($form['title'] . ' (' . $form['page_title'] . ')'); ?>
@@ -671,15 +672,15 @@ class Yeepdf_Creator_form_widget_Backend
 				<?php endforeach; ?>
 			</select>
 			<select name="pdfcreator_formwidget_entry" id="pdfcreator_formwidget_entry">
-				<option value="0"><?php esc_html_e("Sample to show", "pdf-for-elementor") ?></option>
+				<option value="0"><?php esc_html_e("Sample to show", "pdf-for-elementor-forms") ?></option>
 				<?php
 				if (! empty($current_form_id)) {
 					$form_parts = explode("-", $current_form_id);
 					if (count($form_parts) > 1) {
 						$element_id = $form_parts[0];
 						$table_e_submissions = $wpdb->prefix . "e_submissions";
-						$results = $wpdb->get_results($wpdb->prepare(
-							"SELECT id, created_at FROM $table_e_submissions WHERE element_id = %s AND type = 'submission' ORDER BY id DESC LIMIT 20",
+						$results = $wpdb->get_results($wpdb->prepare( //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
+							"SELECT id, created_at FROM $table_e_submissions WHERE element_id = %s AND type = 'submission' ORDER BY id DESC LIMIT 20", //phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 							$element_id
 						));
 						$current_entry = get_post_meta($post->ID, '_pdfcreator_formwidget_entry', true);
@@ -700,11 +701,19 @@ class Yeepdf_Creator_form_widget_Backend
 	}
 	function save_metabox($post_id, $post)
 	{
-		if (isset($_POST['pdfcreator_formwidget'])) {
-			$id = sanitize_text_field($_POST['pdfcreator_formwidget']);
-			$entry = sanitize_text_field($_POST['pdfcreator_formwidget_entry']);
+		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+			return;
+		}
+		if (!current_user_can('edit_post', $post_id)) {
+			return;
+		}
+		if (isset($_POST['pdfcreator_formwidget'])) { //phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$id = sanitize_text_field(wp_unslash($_POST['pdfcreator_formwidget'])); //phpcs:ignore WordPress.Security.NonceVerification.Missing
+			if (isset($_POST['pdfcreator_formwidget_entry'])) { //phpcs:ignore WordPress.Security.NonceVerification.Missing
+				$entry = sanitize_text_field(wp_unslash($_POST['pdfcreator_formwidget_entry'])); //phpcs:ignore WordPress.Security.NonceVerification.Missing
+				update_post_meta($post_id, '_pdfcreator_formwidget_entry', $entry);
+			}
 			update_post_meta($post_id, '_pdfcreator_formwidget', $id);
-			update_post_meta($post_id, '_pdfcreator_formwidget_entry', $entry);
 		}
 	}
 	/**
@@ -716,7 +725,7 @@ class Yeepdf_Creator_form_widget_Backend
 	{
 		$inner_shortcode["all-fields"] = "All Submitted Fields";
 		// Attempt to get the current Post ID from the URL or global state
-		$post_id = isset($_GET["post"]) ? sanitize_text_field($_GET["post"]) : get_the_ID();
+		$post_id = isset($_GET["post"]) ? sanitize_text_field(wp_unslash($_GET["post"])) : get_the_ID(); //phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended
 		if ($post_id) {
 			// Retrieve the linked Form ID and Page ID (stored as "widgetid-pageid")
 			$form_data_meta = get_post_meta($post_id, '_pdfcreator_formwidget', true);
@@ -741,7 +750,7 @@ class Yeepdf_Creator_form_widget_Backend
 		}
 		// Fallback if no form is selected or no fields are found
 		if (count($inner_shortcode) <= 1) {
-			$inner_shortcode["https://pdf.add-ons.org/shortcode-not-showing-in-pdf-template/"] = __("Please select a form", "pdf-for-elementor");
+			$inner_shortcode["https://pdf.add-ons.org/shortcode-not-showing-in-pdf-template/"] = __("Please select a form", "pdf-for-elementor-forms");
 		}
 		$shortcode["Elementor Form"] = $inner_shortcode;
 		return $shortcode;

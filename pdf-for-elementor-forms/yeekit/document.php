@@ -1,6 +1,7 @@
 <?php
 if (! defined('ABSPATH')) exit; // Exit if accessed directly
 global $yeekit_document_addons;
+//phpcs:disable WordPress.WP.I18n.TextDomainMismatch
 if (!class_exists('Yeekit_Document_Addons')) {
     class Yeekit_Document_Addons
     {
@@ -13,7 +14,7 @@ if (!class_exists('Yeekit_Document_Addons')) {
             add_action('wp_ajax_yeekit_dismiss_noty', array($this, 'dismiss_noty'));
             add_action('admin_notices', array($this, "add_banner"));
             add_action('elementor/element/form/section_form_options/after_section_end', array($this, 'elementor_addons'));
-            if (isset($_GET["page"]) && $_GET["page"] == "ninja-forms") {
+            if (isset($_GET["page"]) && $_GET["page"] == "ninja-forms") { //phpcs:ignore WordPress.Security.NonceVerification.Recommended
                 add_action('admin_init', array($this, "add_ninja_form"));
             }
             add_action('elementor/editor/after_enqueue_styles', array($this, "after_register_styles"));
@@ -85,7 +86,7 @@ if (!class_exists('Yeekit_Document_Addons')) {
             $element->start_controls_section(
                 'section_yeekit_addons',
                 [
-                    'label' => __('Forms Add-ons', 'text-domain'),
+                    'label' => __('Forms Add-ons', 'yeekit'),
                     'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
                 ]
             );
@@ -185,8 +186,10 @@ if (!class_exists('Yeekit_Document_Addons')) {
         function dismiss_noty()
         {
             check_ajax_referer('yeekit_addons_nonce', 'nonce');
-            $id = sanitize_text_field($_POST["id"]);
-            update_user_meta(get_current_user_id(), 'yeeaddons_dismissed_' . $id, true);
+            if (isset($_POST["id"])) {
+                $id = sanitize_text_field(wp_unslash($_POST["id"]));
+                update_user_meta(get_current_user_id(), 'yeeaddons_dismissed_' . $id, true);
+            }
             wp_send_json_success();
         }
         function add_js()
@@ -200,7 +203,7 @@ if (!class_exists('Yeekit_Document_Addons')) {
         function add_menu()
         {
             add_submenu_page("wpcf7", "contact-form-7 addons", "<span style='color:#f18500'>Add-ons </span><span class='update-plugins count-1'><span class='plugin-count'>36</span></span>", "manage_options", "contact-form-7-addons", array($this, 'page_addons_cf7'), 999);
-            add_submenu_page("elementor", "elementor form addons", "<span style='color:#f18500'>Forms Add-ons </span><span class='update-plugins count-1'><span class='plugin-count'>15</span></span>", "manage_options", "elementor-forms-addons", array($this, 'page_addons_elementor'), 999);
+            add_submenu_page("elementor", "Elementor Form ddons", "Forms Add-ons", "manage_options", "elementor-forms-addons", array($this, 'page_addons_elementor'), 999);
             add_submenu_page("fluent_forms", "addons", "<span style='color:#f18500'>Add-ons </span><span class='update-plugins count-1'><span class='plugin-count'>36</span></span>", "manage_options", "fluent_forms-addons", array($this, 'page_addons_fluent_forms'));
             add_submenu_page("formidable", "addons", "<span style='color:#f18500'>Add-ons </span><span class='update-plugins count-1'><span class='plugin-count'>36</span></span>", "manage_options", "formidable-addons", array($this, 'page_addons_formidable'), 999);
             add_submenu_page("quform.dashboard", "addons", "<span style='color:#f18500'>Add-ons </span><span class='update-plugins count-1'><span class='plugin-count'>36</span></span>", "manage_options", "quform.dashboard-addons", array($this, 'page_addons_quform'), 999);
@@ -293,11 +296,11 @@ if (!class_exists('Yeekit_Document_Addons')) {
                             "authorurl" => "https://add-ons.org",
                             "class" => "",
                             "star" => 5,
-                            "starnum" => rand(10, 100),
-                            "downloaded" => rand(100, 1000),
-                            "version" => "2." . rand(10, 100),
+                            "starnum" => wp_rand(10, 100),
+                            "downloaded" => wp_rand(100, 1000),
+                            "version" => "2." . wp_rand(10, 100),
                             "compatible" => "4.0",
-                            "date" => date("Y-m-d h:i:sa")
+                            "date" => gmdate("Y-m-d h:i:sa")
                         );
                         $datas_rs = json_decode($response['body'], true);
                         $add_on = $datas_rs["addons"];
@@ -476,14 +479,15 @@ if (!class_exists('Yeekit_Document_Addons')) {
             }
         }
     }
-    $yeekit_document_addons = new Yeekit_Document_Addons;
+    $yeekit_document_addons = new Yeekit_Document_Addons; //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 }
+//phpcs:enable WordPress.WP.I18n.TextDomainMismatch
 $yeekit_document_addons->set_document_link(
     array(
         "plugin" => "pdf-for-elementor-forms/pdf-for-elementor-forms.php",
-        "pro"=>"https://add-ons.org/plugin/elementor-form-pdf-generator-attachment/",
-        "plugin_name"=> "PDF For Elementor Forms",
-        "document"=>"https://pdf.add-ons.org/elementor-forms/",
-        "notice_id"=>1538
+        "pro" => "https://add-ons.org/plugin/elementor-form-pdf-generator-attachment/",
+        "plugin_name" => "PDF For Elementor Forms",
+        "document" => "https://pdf.add-ons.org/elementor-forms/",
+        "notice_id" => 1538
     )
 );

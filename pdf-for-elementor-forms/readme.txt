@@ -3,85 +3,94 @@ Contributors: addonsorg
 Tags: pdf Elementor, Elementor form pdf, Elementor pdf, Elementor forms pdf
 Requires at least: 2.0
 Tested up to: 6.9
-Stable tag: 6.5.2
+Stable tag: 7.0.0
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-The plugin helps you create PDF for Elementor Forms you can builder template pdf
+Automatically generate, email, and download professional PDFs from Elementor Form submissions with a powerful, visual Drag & Drop Template Builder.
 
 == Description ==
 
+**PDF for Elementor Forms** is the most intuitive and powerful solution to transform form submissions into professional PDF documents. Whether you are creating invoices, registration receipts, certificates, or custom applications, our **Drag & Drop PDF Builder** makes it seamless.
+
+Stop wrestling with complex code or basic layouts. With this plugin, you get a visual interface to design your PDFs exactly how you want them, using dynamic data from your Elementor Forms.
+
 [youtube https://youtu.be/mZ2G0ULw7uM?si=rnJDltGNxB27UDmH]
 
-**DEMO**: <https://pdf.add-ons.org/elementor-forms/>
-**Download Pro Version**: <https://add-ons.org/plugin/elementor-form-pdf-generator-attachment/>
-**Documents**: <https://pdf.add-ons.org/document/>
+### Key Benefits:
+*   **Visual Drag & Drop Editor**: Design beautiful PDF layouts without touching a single line of code.
+*   **Automation at its Best**: Automatically generate and attach PDFs to Elementor Form emails.
+*   **Conditional PDF Generation**: Use smart logic to decide when a PDF should be created or what content to display.
+*   **Dynamic Merge Tags**: Insert any form field data directly into your PDF templates.
+*   **Multi-Language Support**: Full compatibility with complex scripts (Hebrew, Arabic, Thai, Japanese, Chinese, Korean, etc.).
+*   **Privacy & Security**: PDFs are generated locally on your server. Your sensitive data never leaves your site.
+*   **Checkout & WooCommerce Ready**: Works perfectly with Elementor Forms used in custom checkout flows, registration pages, and post-purchase thank-you pages.
 
-The PDF For Elementor Forms add-on is an additional plugin that extends the functionality of Elementor Forms by providing features for generating PDF files from form submissions and attaching files to email notifications.
+**DEMO**: [View Live Demo](https://pdf.add-ons.org/elementor-forms/)
+**UPGRADE TO PRO**: [Get Advanced Features](https://add-ons.org/plugin/elementor-form-pdf-generator-attachment/)
+**DOCUMENTATION**: [Step-by-step Guide](https://pdf.add-ons.org/document/)
 
-Elementor Forms PDF is a helpful tool that helps you build and customize the PDF Templates for Elementor Forms. The plugin provides sufficient base elements and Elementor Forms elements as well as developmental tools for users to build a completed pdf. You can easily drag and drop, edit and style for transaction PDF using layouts, insert desire contents with no coding knowledge required, and adds a PDF to the email sent out to your customers. Overall, you need to do is a couple of mouse clicks to create and experience your pdf template that will be sent to your customers.
+== Features ==
 
-== Drag and Drop Templates ==
-The plugin offers a web-based drag & drop PDF template editor that lets you design templates and generate PDF documents from reusable templates without coding.
-== Unlimited Use, No Restrictions ==
-There are zero hard limits to the number of PDFs you can configure across all your forms or generate on your entries. 
-== Additional Fonts ==
-Match your branding and enhance the overall look and feel of PDFs by install your own fonts.
-== Custom PDF Paper Size ==
-Allows you to add custom different paper sizes for your PDF templates. 
-== Shortcode and Merge Tags ==
-You can generate a link or URL to PDFs using both shortcodes and merge tags so your users can download the PDF right after form submission.
-== Conditional Logic ==
-You can hide or show PDF content or create or uncreate pdf.
-== The Second PDF For a Form ==
-It is possible to make a generation of multiple PDFs for the same form.
-== Download PDF Files ==
-You can view and download PDFs from the Elementor Submissions page.
-== Smart Real-Time Preview ==
-View the instant preview of the customization for documents as you make them. See real-time previews of the last placed order with your desired custom appearance.
-== Privacy and Security ==
-Your form data is never sent to a third party to generate the PDFs and the documents are generated directly on your web server.
-== Page Break  ==
-We can use Page Break and new content will be move on next pages in PDF.
-== Multilingual ==
-A multitude of languages from across the globe can be displayed in PDFs, include complex scripts like Hebrew, Arabic, Thai, Japanese, Chinese, and Korean.
+- **Unlimited PDF Templates**: No restrictions on the number of PDFs or forms you can configure.
+- **Custom Paper Sizes**: Add and use any custom paper dimensions (A4, Letter, or bespoke sizes).
+- **Custom Font Support**: Upload your own .TTF fonts to stay perfectly on-brand.
+- **Real-Time Preview**: Instantly see how your changes look with a live preview inside the editor.
+- **Shortcode & Merge Tag Support**: Easily generate download links/URLs for users post-submission.
+- **Advanced Page Breaks**: Gain full control over document flow with manual and automatic page breaks.
+- **Multiple PDFs per Form**: Generate different PDF versions (e.g., one for Admin, one for Customer) for a single submission.
 
+== PRO FEATURES ==
 
-
-== PRO VERSION ==
-* Table Customization
-* Yeekitqrcode Supports
-* Barcode Supports
-* Watermarks Supports
-* Header Supports
-* Footer Supports
-* Conditional logics Supports
-* 30-day money-back guarantee
-* 1-year support
-
-== External services ==
-
-This plugin connects to the Dropbox API to store PDF files. Data is only sent to Dropbox when the user has configured and enabled the integration in the plugin settings. This service is provided by Dropbox, Inc.
-terms of use <https://www.dropbox.com/terms>, privacy policy <https://www.dropbox.com/privacy>
-	
+*   **Advanced Table Customization**: Create complex, styled tables for orders or lists.
+*   **QR Codes & Barcodes**: Generate dynamic QR/Barcodes based on form data (Product IDs, dates, etc.).
+*   **Watermarking**: Protect your documents with custom text or image watermarks.
+*   **Header & Footer Support**: Add consistent branding and page numbers across all pages.
+*   **Dropbox Integration**: Automatically sync and save generated PDFs to your Dropbox account.
+*   **Premium Support**: 1 year of dedicated technical assistance and regular updates.
 
 == Installation ==
-**Normal installation**
 
-1. Download the pdf-for-elementor.zip file to your computer.
-1. Unzip the file.
-1. Upload the `pdf-for-elementor.zip` directory to your `/wp-content/plugins/` directory.
-1. Activate the plugin through the 'Plugins' menu in WordPress.
-Document: <https://pdf.add-ons.org/document/>
+1. Log in to your WordPress Dashboard.
+2. Go to **Plugins** > **Add New**.
+3. Search for "PDF for Elementor Forms".
+4. Click **Install Now** and then **Activate**.
+5. Navigate to **PDF Templates** in your sidebar to start building your first template!
 
+== Frequently Asked Questions ==
+
+= Does it work with the free version of Elementor? =
+Yes, but you need the "Forms" widget, which is typically a feature of **Elementor Pro**.
+
+= Can I attach the PDF to emails? =
+Absolutely. Within the Elementor Form actions, you can select "PDF Creator" to automatically attach the generated file to your notifications.
+
+= Are there any limits on the number of PDFs? =
+No. You can create unlimited templates and generate as many PDFs as your server can handle.
+
+= Does it support RTL languages? =
+Yes, the plugin fully supports RTL scripts like Hebrew and Arabic.
+
+== Screenshots ==
+
+1. Visual Drag & Drop PDF Template Builder.
+2. Dynamic merge tags and element styling.
+3. Elementor Form Action integration for PDF generation.
+4. Auto-attached PDF in customer email notifications.
 
 == Changelog ==
+
+= 7.1.0 =
+- NEW: Refactored engine for faster PDF rendering.
+- IMPROVED: Enhanced UI for the Drag & Drop editor.
+- UPDATED: Optimized readme for SEO and user clarity.
+
 = 6.5.2 =
-- Fixed: Textarea, Radio input
+- Fixed: Textarea and Radio input rendering issues.
 
 = 6.5.1 =
-- Fixed: PHP Object Injection
+- Security: Fixed potential PHP Object Injection vulnerability.
 
 = 6.3.1 =
 - Added: Select emails to attach to the email.

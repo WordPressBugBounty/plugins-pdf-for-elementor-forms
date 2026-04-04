@@ -1,7 +1,7 @@
 <?php
 if (! defined('ABSPATH')) exit; // Exit if accessed directly
 //version 1.4: Add voucher
-ini_set('pcre.backtrack_limit', 10000000);
+ini_set('pcre.backtrack_limit', 10000000); //phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged
 if (!function_exists('str_contains')) {
 	function str_contains($haystack, $needle)
 	{
@@ -75,8 +75,8 @@ class Yeepdf_Create_PDF
 	}
 	function template_include($template)
 	{
-		if (isset($_GET['pdf_preview'])) {
-			if ($_GET['pdf_preview'] == "preview") {
+		if (isset($_GET['pdf_preview'])) { //phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			if ($_GET['pdf_preview'] == "preview") { //phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				$template = YEEPDF_CREATOR_BUILDER_PATH . "preview.php";
 			}
 			if (file_exists($template)) {
@@ -208,7 +208,7 @@ class Yeepdf_Create_PDF
 		$fontDirs = $defaultConfig['fontDir'];
 		$fontData  = Yeepdf_Settings_Main::get_list_fonts();
 		$google_fonts = get_option("pdf_custom_fonts", array());
-		$google_fonts = apply_filters("pdf_custom_fonts", $google_fonts);
+		$google_fonts = apply_filters("pdf_custom_fonts", $google_fonts); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		$size = $settings["size"];
 		$sizes = explode(",", $size);
 		if (count($sizes) > 1) {
@@ -364,7 +364,7 @@ class Yeepdf_Create_PDF
 			default:
 				//preview
 				$html = str_replace("data---image", "data:image", $html);
-				
+
 				$html = apply_filters("yeepdf_output_html", $html, $data_attrs);
 				$mpdf->WriteHTML($html);
 				$mpdf->Output($data_attrs["name"] . ".pdf", "I");
@@ -375,9 +375,9 @@ class Yeepdf_Create_PDF
 	{
 		$html = "";
 		$data_json = get_post_meta($id_template, 'data_email', true);
-		if(is_array($data_json)){
+		if (is_array($data_json)) {
 			$data_json = $data_json;
-		}else{
+		} else {
 			$data_json = json_decode($data_json, true);
 		}
 		if (!$data_json) {
@@ -399,6 +399,7 @@ class Yeepdf_Create_PDF
 			?>body {
 				background-color: <?php echo esc_attr($container["background-color"]) ?> !important;
 			}
+
 			@page {
 				margin: <?php echo esc_attr($container["padding-top"]) ?> <?php echo esc_attr($container["padding-right"]) ?> <?php echo esc_attr($container["padding-bottom"]) ?> <?php echo esc_attr($container["padding-left"]) ?>;
 				<?php
@@ -413,6 +414,7 @@ class Yeepdf_Create_PDF
 				}
 				?>
 			}
+
 			<?php
 			}
 			?>.<?php echo esc_attr($class) ?> {
@@ -427,6 +429,7 @@ class Yeepdf_Create_PDF
 				echo wp_kses_post($container_css);
 				?>
 			}
+
 			.<?php echo esc_attr($class) ?>,
 			body,
 			table,
@@ -463,7 +466,8 @@ class Yeepdf_Create_PDF
 					if ($show_row) {
 				?>
 						<div class="container-row" style="width:100%;">
-							<div class="row" style="<?php echo ($row_style); // phpcs:ignore WordPress.Security.EscapeOutput ?>">
+							<div class="row" style="<?php echo ($row_style); // phpcs:ignore WordPress.Security.EscapeOutput 
+													?>">
 								<?php
 								$i = 0;
 								foreach ($row_columns as $column) {
@@ -761,10 +765,10 @@ class Yeepdf_Create_PDF
 	}
 	public static function is_logic($conditional, $datas = null, $test = false)
 	{
-		if (isset($_GET["woo_order"])) {
+		if (isset($_GET["woo_order"])) { //phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			//woo download
 		} else {
-			if (isset($_GET["pdf_preview"])) {
+			if (isset($_GET["pdf_preview"])) { //phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				return true;
 			}
 		}

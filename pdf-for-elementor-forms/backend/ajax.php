@@ -1,6 +1,7 @@
 <?php
 if (!defined('ABSPATH'))
 	exit; // Exit if accessed directly
+//phpcs:disable WordPress.WP.I18n.TextDomainMismatch
 class Yeepdf_Ajax
 {
 	function __construct()
@@ -67,8 +68,8 @@ class Yeepdf_Ajax
 	function pdf_reset_template_php()
 	{
 		if (isset($_GET["pdf_reset"])) {
-			if (wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['_wpnonce'])), 'pdf_reset')) {
-				$post_id = sanitize_text_field(wp_unslash($_GET['post']));
+			if (isset($_GET['_wpnonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['_wpnonce'])), 'pdf_reset')) { //phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				$post_id = isset($_GET['post']) ? sanitize_text_field(wp_unslash($_GET['post'])) : '';
 				update_post_meta($post_id, 'data_email', '');
 			}
 		}
@@ -94,11 +95,11 @@ class Yeepdf_Ajax
 		check_ajax_referer('_yeepdf_check_nonce', '_nonce');
 		if (class_exists("Yeepdf_Addons_Woocommerce_Shortcodes")) {
 			$shortcode = new Yeepdf_Addons_Woocommerce_Shortcodes;
-			$order_id = sanitize_text_field($_POST["order_id"]);
+			$order_id = isset($_POST["order_id"]) ? sanitize_text_field(wp_unslash($_POST["order_id"])) : '';
 			$shortcode->set_order_id($order_id);
 		}
-		$string_with_shortcodes = wp_filter_post_kses($_POST["text"]);
-		$type = sanitize_text_field($_POST["type"]);
+		$string_with_shortcodes = isset($_POST["text"]) ? sanitize_textarea_field(wp_unslash($_POST["text"])) : '';
+		$type = isset($_POST["type"]) ? sanitize_text_field(wp_unslash($_POST["type"])) : '';
 		if ($type == "barcode") {
 			$string_with_shortcodes = '[wp_builder_pdf_barcode]' . $string_with_shortcodes . '[/wp_builder_pdf_barcode]';
 		} elseif ($type == "qrcode") {
@@ -106,8 +107,9 @@ class Yeepdf_Ajax
 		}
 		$string_with_shortcodes = str_replace('\\', "", $string_with_shortcodes);
 		$string_with_shortcodes = do_shortcode($string_with_shortcodes);
-		echo $string_with_shortcodes; // phpcs:ignore WordPress.Security.EscapeOutput
+		echo wp_kses_post($string_with_shortcodes);
 		die();
 	}
 }
 new Yeepdf_Ajax;
+//phpcs:enable WordPress.WP.I18n.TextDomainMismatch

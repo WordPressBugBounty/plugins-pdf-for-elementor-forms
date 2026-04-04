@@ -1,6 +1,7 @@
 <?php
 if (! defined('ABSPATH')) exit; // Exit if accessed directly
 global $yeepdf_settings_backend_main;
+//phpcs:disable WordPress.WP.I18n.TextDomainMismatch
 class Yeepdf_Settings_Builder_PDF_Backend
 {
     function __construct()
@@ -370,7 +371,7 @@ class Yeepdf_Settings_Builder_PDF_Backend
     {
         global $post;
         $add_libs = false;
-        if ((isset($post->post_type) && $post->post_type == "yeepdf") || (isset($_GET["post_type"]) && $_GET["post_type"] == "yeepdf")) {
+        if ((isset($post->post_type) && $post->post_type == "yeepdf") || (isset($_GET["post_type"]) && $_GET["post_type"] == "yeepdf")) { //phpcs:ignore WordPress.Security.NonceVerification.Recommended
             $add_libs = true;
         }
         $add_libs = apply_filters("yeepdf_add_libs", $add_libs);
@@ -437,7 +438,7 @@ class Yeepdf_Settings_Builder_PDF_Backend
     function add_font()
     {
         global $post_type;
-        if ("yeepdf" == $post_type || (isset($_GET["page"]) && $_GET["page"] == "yeepdf-settings")) {
+        if ("yeepdf" == $post_type || (isset($_GET["page"]) && $_GET["page"] == "yeepdf-settings")) { //phpcs:ignore WordPress.Security.NonceVerification.Recommended
             $upload_dir = wp_upload_dir();
             $path_main = $upload_dir['basedir'] . '/pdfs/fonts/';
             $defaultConfig     = (new Mpdf\Config\ConfigVariables())->getDefaults();
@@ -451,11 +452,13 @@ class Yeepdf_Settings_Builder_PDF_Backend
                     font-style: normal;
                     font-weight: 400;
                     font-display: block;
-                    src: url(<?php echo esc_url(YEEPDF_CREATOR_BUILDER_URL) ?>"vendor/mpdf/mpdf/ttfonts/fontawesome.ttf") format("truetype");
+                    src: url("<?php echo esc_url(YEEPDF_CREATOR_BUILDER_URL) ?>vendor/mpdf/mpdf/ttfonts/fontawesome.ttf") format("truetype");
                 }
+
                 .fontawesome {
                     font-family: "fontawesome";
                 }
+
                 <?php foreach ($fonts as $key => $value) {
                     foreach ($value as $k => $vl) {
                         if (is_readable($fontDirs[0] . "/" . $vl)) {
@@ -481,6 +484,7 @@ class Yeepdf_Settings_Builder_PDF_Backend
                     font-style: <?php echo esc_attr($font_style) ?>;
                     font-weight: <?php echo esc_attr($font_weight) ?>;
                 }
+
                 <?php
                         }
                     }
@@ -510,6 +514,7 @@ class Yeepdf_Settings_Builder_PDF_Backend
                     font-style: <?php echo esc_attr($font_style) ?>;
                     font-weight: <?php echo esc_attr($font_weight) ?>;
                 }
+
                 <?php
                         }
                     }
@@ -599,7 +604,7 @@ class Yeepdf_Settings_Builder_PDF_Backend
         $styles[] = 'text-decoration';
         $styles[] = 'line-height';
         $styles[] = 'letter-spacing';
-        $styles[] = 'white-space'; 
+        $styles[] = 'white-space';
         $styles[] = 'cursor';
         $styles[] = 'vertical-align';
         return $styles;
@@ -622,7 +627,7 @@ class Yeepdf_Settings_Builder_PDF_Backend
             return;
         }
         if (isset($_POST['data_email'])) {
-            $raw = wp_unslash($_POST['data_email']);
+            $raw = wp_unslash($_POST['data_email']); //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
             $raw = is_string($raw) ? trim($raw) : '';
             if ($raw !== '') {
                 $decoded = json_decode($raw, true);
@@ -635,11 +640,11 @@ class Yeepdf_Settings_Builder_PDF_Backend
                     update_post_meta($post_id, 'data_email', $clean_data);
                 } else {
                     // Invalid JSON - don't overwrite existing stored template.
-                    error_log('YeePDF: invalid JSON received for data_email on post_id=' . absint($post_id));
+                    //error_log('YeePDF: invalid JSON received for data_email on post_id=' . absint($post_id));
                 }
             } else {
                 // Empty value clears the meta.
-                error_log('YeePDF: invalid JSON received for data_email on post_id=' . absint($post_id));
+                //error_log('YeePDF: invalid JSON received for data_email on post_id=' . absint($post_id));
             }
         }
         if (isset($_POST['builder_pdf_settings_font_family'])) {
@@ -649,7 +654,7 @@ class Yeepdf_Settings_Builder_PDF_Backend
         if (isset($_POST['builder_pdf_settings'])) {
             $datas = array();
             if (is_array($_POST["builder_pdf_settings"])) {
-                foreach ($_POST["builder_pdf_settings"] as $key => $value) {
+                foreach ($_POST["builder_pdf_settings"] as $key => $value) { //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
                     $datas[sanitize_key($key)] = sanitize_textarea_field(wp_unslash($value));
                 }
                 update_post_meta($post_id, '_builder_pdf_settings', $datas);
@@ -699,7 +704,7 @@ class Yeepdf_Settings_Builder_PDF_Backend
                     "cat" => array(),
                     "id" => 0,
                 );
-                do_action("builder_yeepdfs");
+                do_action("builder_yeepdfs"); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
                 ?>
             </div>
         </div>
@@ -805,3 +810,4 @@ class Yeepdf_Settings_Builder_PDF_Backend
     }
 }
 $yeepdf_settings_backend_main = new Yeepdf_Settings_Builder_PDF_Backend;
+//phpcs:enable WordPress.WP.I18n.TextDomainMismatch
