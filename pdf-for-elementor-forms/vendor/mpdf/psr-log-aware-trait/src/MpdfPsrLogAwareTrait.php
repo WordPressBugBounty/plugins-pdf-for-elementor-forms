@@ -12,7 +12,7 @@ trait MpdfPsrLogAwareTrait
 	 */
 	protected $logger;
 
-	public function setLogger(LoggerInterface $logger)
+	public function setLogger(LoggerInterface $logger): void
 	{
 		$this->logger = $logger;
 		if (property_exists($this, 'services') && is_array($this->services)) {
@@ -23,5 +23,4 @@ trait MpdfPsrLogAwareTrait
 			}
 		}
 	}
-
 }

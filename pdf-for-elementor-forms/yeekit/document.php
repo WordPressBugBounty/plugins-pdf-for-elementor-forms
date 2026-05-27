@@ -92,6 +92,9 @@ if (!class_exists('Yeekit_Document_Addons')) {
             );
             $datas = $this->get_addons("elementor");
             $html = '';
+            if (!is_array($datas)) {
+                $datas = [];
+            }
             foreach ($datas as $data) {
                 if (wp_http_validate_url($data["download"])) {
                     $dl = $data["download"];

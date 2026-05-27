@@ -4,7 +4,7 @@ namespace Mpdf\PsrLogAwareTrait;
 
 use Psr\Log\LoggerInterface;
 
-trait PsrLogAwareTrait 
+trait PsrLogAwareTrait
 {
 
 	/**
@@ -12,9 +12,8 @@ trait PsrLogAwareTrait
 	 */
 	protected $logger;
 
-	public function setLogger(LoggerInterface $logger)
+	public function setLogger(LoggerInterface $logger): void
 	{
 		$this->logger = $logger;
 	}
-	
 }

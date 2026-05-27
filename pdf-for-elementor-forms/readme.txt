@@ -2,8 +2,8 @@
 Contributors: addonsorg
 Tags: pdf Elementor, Elementor form pdf, Elementor pdf, Elementor forms pdf
 Requires at least: 2.0
-Tested up to: 6.9
-Stable tag: 7.0.0
+Tested up to: 7.0
+Stable tag: 7.0.1
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -81,7 +81,10 @@ Yes, the plugin fully supports RTL scripts like Hebrew and Arabic.
 
 == Changelog ==
 
-= 7.1.0 =
+= 7.0.1 =
+UPDATED Important PHP: support php 8.0 and min php 7.0
+
+= 7.0.0 =
 - NEW: Refactored engine for faster PDF rendering.
 - IMPROVED: Enhanced UI for the Drag & Drop editor.
 - UPDATED: Optimized readme for SEO and user clarity.

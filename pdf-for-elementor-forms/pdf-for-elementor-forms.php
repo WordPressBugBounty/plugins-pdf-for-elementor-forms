@@ -5,8 +5,8 @@
  * Plugin URI: https://add-ons.org/plugin/elementor-form-pdf-generator-attachment/
  * Requires Plugins: elementor
  * Author: add-ons.org
- * Version: 7.0.0
- * Requires PHP: 5.6
+ * Version: 7.0.1
+ * Requires PHP: 7.0
  * Elementor tested up to: 4.0.1
  * Elementor pro tested up to: 4.0.1
  * Author URI: https://add-ons.org/
