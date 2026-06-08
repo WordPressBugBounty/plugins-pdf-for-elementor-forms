@@ -10,6 +10,7 @@ class Yeepdf_Ajax
 		add_action('wp_ajax_yeepdf_builder_export_html', array($this, 'yeepdf_builder_export_html'));
 		add_action('wp_ajax_pdf_reset_template', array($this, 'pdf_reset_template'));
 		add_action('wp_ajax_yeepdf_import_template', array($this, 'yeepdf_import_template'));
+		add_action('wp_ajax_yeepdf_convert_pdf', array($this, 'yeepdf_convert_pdf'));
 		add_action("admin_init", array($this, "pdf_reset_template_php"));
 		add_action('add_meta_boxes', array($this, 'remove_wp_seo_meta_box'), 100);
 	}
@@ -109,6 +110,26 @@ class Yeepdf_Ajax
 		$string_with_shortcodes = do_shortcode($string_with_shortcodes);
 		echo wp_kses_post($string_with_shortcodes);
 		die();
+	}
+
+	function yeepdf_convert_pdf()
+	{
+		check_ajax_referer('_yeepdf_check_nonce', '_nonce');
+		$pdf_url = isset($_POST["pdf_url"]) ? esc_url_raw(wp_unslash($_POST["pdf_url"])) : '';
+		if (empty($pdf_url)) {
+			wp_send_json_error(array('message' => 'Empty URL'));
+		}
+
+		if (!class_exists('Imagick')) {
+			wp_send_json_error(array('message' => 'Imagick extension is not installed on the server.', 'imagick_missing' => true));
+		}
+
+		$images = Yeepdf_Create_PDF::convert_pdf_to_images($pdf_url);
+		if (!empty($images)) {
+			wp_send_json_success(array('images' => $images));
+		} else {
+			wp_send_json_error(array('message' => 'Conversion failed'));
+		}
 	}
 }
 new Yeepdf_Ajax;

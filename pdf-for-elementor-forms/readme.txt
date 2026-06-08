@@ -3,8 +3,8 @@ Contributors: addonsorg
 Tags: pdf Elementor, Elementor form pdf, Elementor pdf, Elementor forms pdf
 Requires at least: 2.0
 Tested up to: 7.0
-Stable tag: 7.0.1
-Requires PHP: 5.6
+Stable tag: 7.1.0
+Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,8 @@ Yes, the plugin fully supports RTL scripts like Hebrew and Arabic.
 4. Auto-attached PDF in customer email notifications.
 
 == Changelog ==
+= 7.1.0 =
+- Added: PDF in pdf builder
 
 = 7.0.1 =
 UPDATED Important PHP: support php 8.0 and min php 7.0

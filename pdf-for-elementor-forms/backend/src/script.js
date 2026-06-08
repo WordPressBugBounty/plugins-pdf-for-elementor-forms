@@ -86,6 +86,9 @@
           });
           $(".yeepdf-table-builder").resizableColumns();
         }
+        if (typeof $.yeepdf_convert_backend_pdfs === 'function') {
+          $.yeepdf_convert_backend_pdfs();
+        }
       },
       builder_to_json: function () {
         //var font_family = $(".email-builder-main").css("font-family").replaceAll('"',"");
