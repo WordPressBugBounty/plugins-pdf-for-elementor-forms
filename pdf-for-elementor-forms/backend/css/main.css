@@ -1750,65 +1750,404 @@ table.rc-table-resizing thead>th>a {
   cursor: ew-resize;
 }
 
+/* ==========================================================================
+   Modern Yeepdf Setup Template Popup Styles
+   ========================================================================== */
+
+.yeepdf-setup-overlay {
+  background: rgba(15, 23, 42, 0.65) !important;
+  backdrop-filter: blur(5px) !important;
+  -webkit-backdrop-filter: blur(5px) !important;
+  z-index: 99998 !important;
+}
+
+.ui-dialog.yeepdf-setup-dialog-container {
+  z-index: 99999 !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
+  background: #ffffff !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  animation: yeepdfFadeInUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes yeepdfFadeInUp {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.yeepdf-setup-dialog-container .ui-dialog-titlebar {
+  position: relative !important;
+  background: #ffffff !important;
+  border: none !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  padding: 18px 24px !important;
+  margin: 0 !important;
+  border-radius: 16px 16px 0 0 !important;
+  display: block !important;
+  min-height: 24px !important;
+  box-sizing: border-box !important;
+}
+
+.yeepdf-setup-dialog-container .ui-dialog-title {
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  margin: 0 !important;
+  line-height: 32px !important;
+  letter-spacing: -0.01em !important;
+  float: left !important;
+}
+
+.yeepdf-setup-dialog-container .ui-dialog-titlebar-close {
+  position: absolute !important;
+  right: 18px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  border-radius: 8px !important;
+  border: 1px solid #e2e8f0 !important;
+  background-color: #f8fafc !important;
+  background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cline x1='18' y1='6' x2='6' y2='18'%3E%3C/line%3E%3Cline x1='6' y1='6' x2='18' y2='18'%3E%3C/line%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: center center !important;
+  background-size: 14px 14px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  cursor: pointer !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  color: transparent !important;
+  text-indent: -9999px !important;
+  overflow: hidden !important;
+  transition: all 0.15s ease !important;
+  box-shadow: none !important;
+  outline: none !important;
+  z-index: 10 !important;
+}
+
+.yeepdf-setup-dialog-container .ui-dialog-titlebar-close:hover {
+  background-color: #fee2e2 !important;
+  border-color: #fecaca !important;
+  background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23ef4444' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cline x1='18' y1='6' x2='6' y2='18'%3E%3C/line%3E%3Cline x1='6' y1='6' x2='18' y2='18'%3E%3C/line%3E%3C/svg%3E") !important;
+}
+
+.yeepdf-setup-dialog-container .ui-dialog-titlebar-close::before,
+.yeepdf-setup-dialog-container .ui-dialog-titlebar-close::after {
+  content: "" !important;
+  display: none !important;
+}
+
+.yeepdf-setup-dialog-container .ui-dialog-titlebar-close .ui-button-icon,
+.yeepdf-setup-dialog-container .ui-dialog-titlebar-close .ui-icon,
+.yeepdf-setup-dialog-container .ui-dialog-titlebar-close .ui-button-text,
+.yeepdf-setup-dialog-container .ui-dialog-titlebar-close .ui-button-icon-space {
+  display: none !important;
+}
+
+.yeepdf-setup-dialog-container .ui-dialog-content {
+  padding: 24px !important;
+  max-height: calc(85vh - 75px) !important;
+  overflow-y: auto !important;
+  box-sizing: border-box !important;
+}
+
+.yeepdf-setup-dialog-container .ui-dialog-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.yeepdf-setup-dialog-container .ui-dialog-content::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.yeepdf-setup-dialog-container .ui-dialog-content::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.yeepdf-setup-dialog-container .ui-dialog-content::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
 #yeepdf-setup-template {
   padding: 0;
+  color: #334155;
+  width: 100% !important;
 }
 
-.yeepdf-setup-title {
-  align-items: center;
-  background-color: #f8f8f8;
-  border-bottom: 1px solid #dddddd;
+.yeepdf-setup-wrapper {
   display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Config Card */
+.yeepdf-setup-config-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.yeepdf-setup-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 680px) {
+  .yeepdf-setup-form-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.yeepdf-setup-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.yeepdf-setup-label {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
-  overflow: hidden;
-  padding: 30px;
-}
-
-.yeepdf-setup-title-text {
-  font-size: 20px;
+  font-size: 13px;
   font-weight: 600;
-  min-width: 200px;
-  padding: 15px 30px;
+  color: #1e293b;
+  margin: 0;
 }
 
-.yeepdf-setup-title-input {
+.yeepdf-badge-required {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: #e0e7ff;
+  color: #4338ca;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.yeepdf-input-box {
+  position: relative;
+  display: flex;
+  align-items: center;
   width: 100%;
-  padding: 0 0px;
 }
 
-.yeepdf-setup-title-input input,
-.yeepdf-setup-title-input select {
-  display: inline-block;
-  font-size: 20px;
-  height: 50px;
-  margin-inline-start: 30px;
-  padding: 13px 10px;
-  width: 400px;
+.yeepdf-input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  display: inline-flex;
+  pointer-events: none;
+  z-index: 1;
 }
 
-.yeepdf-setup-title-input select {
-  padding: 0 13px;
+.yeepdf-setup-input,
+.yeepdf-setup-select {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 42px !important;
+  padding: 0 12px 0 38px !important;
+  margin: 0 !important;
+  font-size: 14px !important;
+  color: #0f172a !important;
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+  transition: all 0.2s ease !important;
+  outline: none !important;
+  box-sizing: border-box !important;
 }
 
-.yeepdf-setup-desc-title {
-  font-size: 20px;
-  font-weight: 600;
-  margin: 30px 30px 0 30px;
-  color: #444444;
+.yeepdf-setup-select {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  padding-right: 34px !important;
+  cursor: pointer !important;
 }
 
-.yeepdf-setup-desc-desc {
-  color: #777777;
-  font-size: 14px;
-  margin: 10px 30px 30px 30px;
+.yeepdf-select-arrow {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+  pointer-events: none;
+  display: inline-flex;
 }
 
-.yeepdf-setup-desc {
-  border-bottom: 1px solid #e7e7e7;
+.yeepdf-setup-input:focus,
+.yeepdf-setup-select:focus {
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05) !important;
 }
 
-#yeepdf-setup-template .list-view-templates {
-  padding-left: 80px;
+.yeepdf-setup-input::placeholder {
+  color: #94a3b8;
+}
+
+/* Banner / Section Heading */
+.yeepdf-setup-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 4px;
+}
+
+.yeepdf-setup-banner-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 4px 0;
+  letter-spacing: -0.01em;
+}
+
+.yeepdf-setup-banner-desc {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Grid Layout for Templates */
+#yeepdf-setup-template .list-view-templates.yeepdf-setup-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(195px, 1fr)) !important;
+  gap: 16px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  list-style: none !important;
+}
+
+#yeepdf-setup-template .grid-item {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.04) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  margin: 0 !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+}
+
+#yeepdf-setup-template .grid-item:hover {
+  transform: translateY(-4px) !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 12px 24px -4px rgba(15, 23, 42, 0.12), 0 4px 8px -2px rgba(15, 23, 42, 0.06) !important;
+}
+
+#yeepdf-setup-template .grid-item img {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 180px !important;
+  object-fit: cover !important;
+  object-position: top center !important;
+  display: block !important;
+  background: #f1f5f9 !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  transition: transform 0.3s ease !important;
+}
+
+#yeepdf-setup-template .grid-item:hover img {
+  transform: scale(1.02);
+}
+
+#yeepdf-setup-template .demo_content {
+  padding: 12px 14px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  flex-grow: 1 !important;
+  justify-content: space-between !important;
+  background: #ffffff !important;
+}
+
+#yeepdf-setup-template .demo-title {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #1e293b !important;
+  margin: 0 0 10px 0 !important;
+  padding: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+#yeepdf-setup-template .yeepdf-email-actions {
+  display: flex !important;
+  gap: 8px !important;
+  align-items: center !important;
+}
+
+#yeepdf-setup-template .yeepdf-email-actions .demo-fl,
+#yeepdf-setup-template .yeepdf-email-actions .demo-fr {
+  width: auto !important;
+  float: none !important;
+  flex: 1 !important;
+}
+
+#yeepdf-setup-template .yeepdf-email-actions .demo-fl {
+  flex: 1.3 !important;
+}
+
+#yeepdf-setup-template .yeepdf-email-actions a.button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 32px !important;
+  line-height: 1 !important;
+  padding: 0 8px !important;
+  border-radius: 6px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  transition: all 0.15s ease !important;
+  box-sizing: border-box !important;
+}
+
+#yeepdf-setup-template .yeepdf-email-actions a.yeepdf-email-actions-import {
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%) !important;
+  border: 1px solid #4f46e5 !important;
+  color: #ffffff !important;
+  box-shadow: 0 1px 2px rgba(79, 70, 229, 0.2) !important;
+}
+
+#yeepdf-setup-template .yeepdf-email-actions a.yeepdf-email-actions-import:hover {
+  background: linear-gradient(135deg, #4338ca 0%, #4f46e5 100%) !important;
+  box-shadow: 0 3px 6px rgba(79, 70, 229, 0.3) !important;
+  transform: translateY(-1px);
+}
+
+#yeepdf-setup-template .yeepdf-email-actions a.yeepdf-email-actions-view {
+  background: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #475569 !important;
+}
+
+#yeepdf-setup-template .yeepdf-email-actions a.yeepdf-email-actions-view:hover {
+  background: #f1f5f9 !important;
+  border-color: #94a3b8 !important;
+  color: #0f172a !important;
 }
 
 .yeepdf-builder-container .mce-tinymce.mce-container.mce-fullscreen {

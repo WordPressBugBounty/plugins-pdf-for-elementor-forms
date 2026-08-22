@@ -449,14 +449,17 @@
         //
         if ($('#yeepdf-setup-template_id').length && $('#yeepdf-setup-template_id').val() == '') {
             if ($('#yeepdf-setup-type').length && $('#yeepdf-setup-type').val() !== '') {
+                var dialogWidth = Math.min(940, $(window).width() - 40);
                 $( "#yeepdf-setup-template" ).dialog({
                     modal: true,
-                    width: 800,
-                    title: "Setup",
-                    buttons: {
-                        OK: function() {
-                        $( this ).dialog( "close" );
-                        }
+                    dialogClass: "yeepdf-setup-dialog-container",
+                    width: dialogWidth,
+                    maxHeight: $(window).height() * 0.9,
+                    title: "Setup PDF Template",
+                    draggable: true,
+                    resizable: false,
+                    open: function() {
+                        $('.ui-widget-overlay').addClass('yeepdf-setup-overlay');
                     }
                 });
             }

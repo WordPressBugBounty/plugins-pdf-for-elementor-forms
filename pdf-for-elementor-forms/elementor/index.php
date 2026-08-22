@@ -1,5 +1,6 @@
 <?php
-if (! defined('ABSPATH')) exit; // Exit if accessed directly
+if (!defined('ABSPATH'))
+	exit; // Exit if accessed directly
 use Elementor\Plugin;
 use ElementorPro\Core\Utils\Collection;
 use ElementorPro\Modules\Forms\Fields\Upload;
@@ -49,7 +50,7 @@ class Yeepdf_Creator_form_widget_Backend
 		foreach ($lists_form as $form) {
 			$post_id = $form->ID;
 			$document = Plugin::$instance->documents->get($post_id);
-			if (! $document) {
+			if (!$document) {
 				continue;
 			}
 			$data = $document->get_elements_data();
@@ -74,14 +75,14 @@ class Yeepdf_Creator_form_widget_Backend
 													$form_id = $datas_elements_inner_2["id"];
 													$form_id = $form_id . "-" . $post_id;
 													$form_title = $datas_elements_inner_2["settings"]["form_name"];
-													$forms[$form_id] = esc_html($form_title  . ' - ' . $widget["id"] . ' (' . $form->post_title . ')');
+													$forms[$form_id] = esc_html($form_title . ' - ' . $widget["id"] . ' (' . $form->post_title . ')');
 												}
 											} else {
 												if (isset($widget_inner1["widgetType"]) && isset($widget_inner1["settings"]["form_name"])) {
 													$form_id = $widget_inner1["id"];
 													$form_id = $form_id . "-" . $post_id;
 													$form_title = $widget_inner1["settings"]["form_name"];
-													$forms[$form_id] = esc_html($form_title  . ' - ' . $widget["id"] . ' (' . $form->post_title . ')');
+													$forms[$form_id] = esc_html($form_title . ' - ' . $widget["id"] . ' (' . $form->post_title . ')');
 												}
 											}
 										}
@@ -90,7 +91,7 @@ class Yeepdf_Creator_form_widget_Backend
 											$form_id = $widget_inner["id"];
 											$form_id = $form_id . "-" . $post_id;
 											$form_title = $widget_inner["settings"]["form_name"];
-											$forms[$form_id] = esc_html($form_title  . ' - ' . $widget["id"] . ' (' . $form->post_title . ')');
+											$forms[$form_id] = esc_html($form_title . ' - ' . $widget["id"] . ' (' . $form->post_title . ')');
 										}
 									}
 								}
@@ -99,7 +100,7 @@ class Yeepdf_Creator_form_widget_Backend
 									$form_id = $widget["id"];
 									$form_id = $form_id . "-" . $post_id;
 									$form_title = $widget["settings"]["form_name"];
-									$forms[$form_id] = esc_html($form_title  . ' - ' . $widget["id"] . ' (' . $form->post_title . ')');
+									$forms[$form_id] = esc_html($form_title . ' - ' . $widget["id"] . ' (' . $form->post_title . ')');
 								}
 							}
 						}
@@ -108,7 +109,7 @@ class Yeepdf_Creator_form_widget_Backend
 							$form_id = $column["id"];
 							$form_id = $form_id . "-" . $post_id;
 							$form_title = $column["settings"]["form_name"];
-							$forms[$form_id] = esc_html($form_title  . ' - ' . $column["id"] . ' (' . $form->post_title . ')');
+							$forms[$form_id] = esc_html($form_title . ' - ' . $column["id"] . ' (' . $form->post_title . ')');
 						}
 					}
 				}
@@ -197,11 +198,11 @@ class Yeepdf_Creator_form_widget_Backend
 		);
 		if (count($results) > 0) {
 			foreach ($results as $rs) {
-?>
+				?>
 				<option value="<?php echo esc_attr($rs["id"]) ?>">
-					<?php echo esc_html($rs["created_at"])  ?>
+					<?php echo esc_html($rs["created_at"]) ?>
 				</option>
-		<?php
+				<?php
 			}
 		}
 		die();
@@ -374,14 +375,14 @@ class Yeepdf_Creator_form_widget_Backend
 		foreach ($raw_fields as $id => $field) {
 			$form_data["[field id='" . $id . "']"] = apply_filters("yeepdf_el_format_input", $field['value'], $field);
 		}
-		$upload_dir   = wp_upload_dir();
+		$upload_dir = wp_upload_dir();
 		for ($i = 1; $i < 11; $i++) {
 			if ($i != 1) {
 				$this->pdf_id = "_" . $i;
 			}
 			$send_status = $this->check_conditional_logic($record);
 			$template = $record->get_form_settings($this->get_control_id("template_pdf"));
-			if ($send_status ==  true && $template != "") {
+			if ($send_status == true && $template != "") {
 				$show_id = $record->get_form_settings($this->get_control_id('pdf_name_show_id'));
 				$attach_email_pdf_list = $record->get_form_settings($this->get_control_id('attach_email_pdf_list'));
 				$attach_email_pdf_list = $record->replace_setting_shortcodes($attach_email_pdf_list);
@@ -554,6 +555,9 @@ class Yeepdf_Creator_form_widget_Backend
 		} else {
 			$args['attachments'] = array_merge($this->attachments_array, $old_attachments);
 		}
+		if (is_array($args['attachments'])) {
+			$args['attachments'] = array_unique($args['attachments']);
+		}
 		return $args;
 	}
 	private function replace_content_shortcodes($email_content, $record, $line_break)
@@ -614,9 +618,9 @@ class Yeepdf_Creator_form_widget_Backend
 	private function field_formatted($field)
 	{
 		$formatted = '';
-		if (! empty($field['title'])) {
+		if (!empty($field['title'])) {
 			$formatted = array("title" => $field['title'], "value" => $field['value']);
-		} elseif (! empty($field['value'])) {
+		} elseif (!empty($field['value'])) {
 			$formatted = array("title" => $field['value'], "value" => $field['value']);
 		}
 		return $formatted;
@@ -634,11 +638,11 @@ class Yeepdf_Creator_form_widget_Backend
 				$form_id = $element['id'] . '-' . $post_id;
 				$form_name = !empty($element['settings']['form_name']) ? $element['settings']['form_name'] : 'Unnamed Form';
 				$found_forms[] = [
-					'id'    => $form_id,
+					'id' => $form_id,
 					'title' => $form_name . ' - ' . $element['id']
 				];
 			}
-			if (! empty($element['elements'])) {
+			if (!empty($element['elements'])) {
 				$this->find_elementor_forms($element['elements'], $post_id, $found_forms);
 			}
 		}
@@ -651,9 +655,11 @@ class Yeepdf_Creator_form_widget_Backend
 		$all_forms = [];
 		foreach ($lists_pages as $page) {
 			$document = \Elementor\Plugin::$instance->documents->get($page->ID);
-			if (! $document) continue;
+			if (!$document)
+				continue;
 			$data = $document->get_elements_data();
-			if (empty($data)) continue;
+			if (empty($data))
+				continue;
 			$page_forms = [];
 			$this->find_elementor_forms($data, $page->ID, $page_forms);
 			foreach ($page_forms as $f) {
@@ -665,7 +671,7 @@ class Yeepdf_Creator_form_widget_Backend
 		<div class="yeepdf-testting-order">
 			<select name="pdfcreator_formwidget" class="builder_pdf_woo_testing pdfcreator_formwidget">
 				<option value="-1"><?php esc_html_e("---Elementor Form---", "pdf-for-elementor-forms") ?></option>
-				<?php foreach ($all_forms as $form) : ?>
+				<?php foreach ($all_forms as $form): ?>
 					<option value="<?php echo esc_attr($form['id']); ?>" <?php selected($current_form_id, $form['id']); ?>>
 						<?php echo esc_html($form['title'] . ' (' . $form['page_title'] . ')'); ?>
 					</option>
@@ -674,7 +680,7 @@ class Yeepdf_Creator_form_widget_Backend
 			<select name="pdfcreator_formwidget_entry" id="pdfcreator_formwidget_entry">
 				<option value="0"><?php esc_html_e("Sample to show", "pdf-for-elementor-forms") ?></option>
 				<?php
-				if (! empty($current_form_id)) {
+				if (!empty($current_form_id)) {
 					$form_parts = explode("-", $current_form_id);
 					if (count($form_parts) > 1) {
 						$element_id = $form_parts[0];
@@ -697,7 +703,7 @@ class Yeepdf_Creator_form_widget_Backend
 				?>
 			</select>
 		</div>
-<?php
+		<?php
 	}
 	function save_metabox($post_id, $post)
 	{

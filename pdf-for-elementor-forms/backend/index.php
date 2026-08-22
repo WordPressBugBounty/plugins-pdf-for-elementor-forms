@@ -810,9 +810,7 @@ class Yeepdf_Settings_Builder_PDF_Backend
                         <a class="button yeepdf-email-actions-import"
                             href="#"><?php esc_html_e("Import", 'pdf-for-woocommerce') //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
                                         ?></a>
-                        <a target="_blank" class="button yeepdf-email-actions-design"
-                            href="<?php echo esc_url($url_design) ?>"><?php esc_html_e("Design", 'pdf-for-woocommerce') //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
-                                                                        ?></a>
+                        
                     </div>
                     <div class="demo-fr">
                         <a target="_blank" class="button yeepdf-email-actions-view"

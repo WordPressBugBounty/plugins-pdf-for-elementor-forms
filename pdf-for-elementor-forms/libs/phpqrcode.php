@@ -98,7 +98,7 @@ define('QR_ECLEVEL_H', 3);
 define('QR_FORMAT_TEXT', 0);
 define('QR_FORMAT_PNG',  1);
 
-class qrstr
+class Yeepdf_qrstr
 {
     public static function set(&$srctab, $x, $y, $repl, $replLen = false)
     {
@@ -160,7 +160,7 @@ define('QR_PNG_MAXIMUM_SIZE',  1024);                                           
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-class QRtools
+class Yeepdf_QRtools
 {
 
     //----------------------------------------------------------------------
@@ -217,14 +217,14 @@ class QRtools
     //----------------------------------------------------------------------
     public static function buildCache()
     {
-        QRtools::markTime('before_build_cache');
+        Yeepdf_QRtools::markTime('before_build_cache');
 
-        $mask = new QRmask();
+        $mask = new Yeepdf_QRmask();
         for ($a = 1; $a <= QRSPEC_VERSION_MAX; $a++) {
-            $frame = QRspec::newFrame($a);
+            $frame = Yeepdf_QRspec::newFrame($a);
             if (QR_IMAGE) {
                 $fileName = QR_CACHE_DIR . 'frame_' . $a . '.png';
-                QRimage::png(self::binarize($frame), $fileName, 1, 0);
+                Yeepdf_QRimage::png(self::binarize($frame), $fileName, 1, 0);
             }
 
             $width = count($frame);
@@ -233,7 +233,7 @@ class QRtools
                 $mask->makeMaskNo($maskNo, $width, $frame, $bitMask, true);
         }
 
-        QRtools::markTime('after_build_cache');
+        Yeepdf_QRtools::markTime('after_build_cache');
     }
 
     //----------------------------------------------------------------------
@@ -306,7 +306,7 @@ class QRtools
 
 //##########################################################################
 
-QRtools::markTime('start');
+Yeepdf_QRtools::markTime('start');
 
 
 
@@ -356,7 +356,7 @@ define('QRCAP_WORDS',        1);
 define('QRCAP_REMINDER',     2);
 define('QRCAP_EC',           3);
 
-class QRspec
+class Yeepdf_QRspec
 {
 
     public static $capacity = array(
@@ -641,7 +641,7 @@ class QRspec
         $xStart = $ox - 2;
 
         for ($y = 0; $y < 5; $y++) {
-            QRstr::set($frame, $xStart, $yStart + $y, $finder[$y]);
+            Yeepdf_qrstr::set($frame, $xStart, $yStart + $y, $finder[$y]);
         }
     }
 
@@ -781,7 +781,7 @@ class QRspec
         );
 
         for ($y = 0; $y < 7; $y++) {
-            QRstr::set($frame, $ox, $oy + $y, $finder[$y]);
+            Yeepdf_qrstr::set($frame, $ox, $oy + $y, $finder[$y]);
         }
     }
 
@@ -809,14 +809,14 @@ class QRspec
 
         $setPattern = str_repeat("\xc0", 8);
 
-        QRstr::set($frame, 0, 7, $setPattern);
-        QRstr::set($frame, $width - 8, 7, $setPattern);
-        QRstr::set($frame, 0, $width - 8, $setPattern);
+        Yeepdf_qrstr::set($frame, 0, 7, $setPattern);
+        Yeepdf_qrstr::set($frame, $width - 8, 7, $setPattern);
+        Yeepdf_qrstr::set($frame, 0, $width - 8, $setPattern);
 
         // Format info
         $setPattern = str_repeat("\x84", 9);
-        QRstr::set($frame, 0, 8, $setPattern);
-        QRstr::set($frame, $width - 8, 8, $setPattern, 8);
+        Yeepdf_qrstr::set($frame, 0, 8, $setPattern);
+        Yeepdf_qrstr::set($frame, $width - 8, 8, $setPattern, 8);
 
         $yOffset = $width - 8;
 
@@ -1045,7 +1045,7 @@ class QRspec
 
 define('QR_IMAGE', true);
 
-class QRimage
+class Yeepdf_QRimage
 {
 
     //----------------------------------------------------------------------
@@ -1160,7 +1160,7 @@ class QRimage
 define('STRUCTURE_HEADER_BITS',  20);
 define('MAX_STRUCTURED_SYMBOLS', 16);
 
-class QRinputItem
+class Yeepdf_QRinputItem
 {
 
     public $mode;
@@ -1176,7 +1176,7 @@ class QRinputItem
             $setData = array_merge($setData, array_fill(0, $size - count($setData), 0));
         }
 
-        if (!QRinput::check($mode, $size, $setData)) {
+        if (!Yeepdf_QRinput::check($mode, $size, $setData)) {
             throw new Exception('Error m:' . $mode . ',s:' . $size . ',d:' . join(',', $setData));
             return null;
         }
@@ -1193,11 +1193,11 @@ class QRinputItem
         try {
 
             $words = (int)($this->size / 3);
-            $bs = new QRbitstream();
+            $bs = new Yeepdf_QRbitstream();
 
             $val = 0x1;
             $bs->appendNum(4, $val);
-            $bs->appendNum(QRspec::lengthIndicator(QR_MODE_NUM, $version), $this->size);
+            $bs->appendNum(Yeepdf_QRspec::lengthIndicator(QR_MODE_NUM, $version), $this->size);
 
             for ($i = 0; $i < $words; $i++) {
                 $val  = (ord($this->data[$i * 3]) - ord('0')) * 100;
@@ -1227,20 +1227,20 @@ class QRinputItem
     {
         try {
             $words = (int)($this->size / 2);
-            $bs = new QRbitstream();
+            $bs = new Yeepdf_QRbitstream();
 
             $bs->appendNum(4, 0x02);
-            $bs->appendNum(QRspec::lengthIndicator(QR_MODE_AN, $version), $this->size);
+            $bs->appendNum(Yeepdf_QRspec::lengthIndicator(QR_MODE_AN, $version), $this->size);
 
             for ($i = 0; $i < $words; $i++) {
-                $val  = (int)QRinput::lookAnTable(ord($this->data[$i * 2])) * 45;
-                $val += (int)QRinput::lookAnTable(ord($this->data[$i * 2 + 1]));
+                $val  = (int)Yeepdf_QRinput::lookAnTable(ord($this->data[$i * 2])) * 45;
+                $val += (int)Yeepdf_QRinput::lookAnTable(ord($this->data[$i * 2 + 1]));
 
                 $bs->appendNum(11, $val);
             }
 
             if ($this->size & 1) {
-                $val = QRinput::lookAnTable(ord($this->data[$words * 2]));
+                $val = Yeepdf_QRinput::lookAnTable(ord($this->data[$words * 2]));
                 $bs->appendNum(6, $val);
             }
 
@@ -1255,10 +1255,10 @@ class QRinputItem
     public function encodeMode8($version)
     {
         try {
-            $bs = new QRbitstream();
+            $bs = new Yeepdf_QRbitstream();
 
             $bs->appendNum(4, 0x4);
-            $bs->appendNum(QRspec::lengthIndicator(QR_MODE_8, $version), $this->size);
+            $bs->appendNum(Yeepdf_QRspec::lengthIndicator(QR_MODE_8, $version), $this->size);
 
             for ($i = 0; $i < $this->size; $i++) {
                 $bs->appendNum(8, ord($this->data[$i]));
@@ -1279,7 +1279,7 @@ class QRinputItem
             $bs = new QRbitrtream();
 
             $bs->appendNum(4, 0x8);
-            $bs->appendNum(QRspec::lengthIndicator(QR_MODE_KANJI, $version), (int)($this->size / 2));
+            $bs->appendNum(Yeepdf_QRspec::lengthIndicator(QR_MODE_KANJI, $version), (int)($this->size / 2));
 
             for ($i = 0; $i < $this->size; $i += 2) {
                 $val = (ord($this->data[$i]) << 8) | ord($this->data[$i + 1]);
@@ -1306,7 +1306,7 @@ class QRinputItem
     public function encodeModeStructure()
     {
         try {
-            $bs =  new QRbitstream();
+            $bs =  new Yeepdf_QRbitstream();
 
             $bs->appendNum(4, 0x03);
             $bs->appendNum(4, ord($this->data[1]) - 1);
@@ -1330,16 +1330,16 @@ class QRinputItem
 
         switch ($this->mode) {
             case QR_MODE_NUM:
-                $bits = QRinput::estimateBitsModeNum($this->size);
+                $bits = Yeepdf_QRinput::estimateBitsModeNum($this->size);
                 break;
             case QR_MODE_AN:
-                $bits = QRinput::estimateBitsModeAn($this->size);
+                $bits = Yeepdf_QRinput::estimateBitsModeAn($this->size);
                 break;
             case QR_MODE_8:
-                $bits = QRinput::estimateBitsMode8($this->size);
+                $bits = Yeepdf_QRinput::estimateBitsMode8($this->size);
                 break;
             case QR_MODE_KANJI:
-                $bits = QRinput::estimateBitsModeKanji($this->size);
+                $bits = Yeepdf_QRinput::estimateBitsModeKanji($this->size);
                 break;
             case QR_MODE_STRUCTURE:
                 return STRUCTURE_HEADER_BITS;
@@ -1347,7 +1347,7 @@ class QRinputItem
                 return 0;
         }
 
-        $l = QRspec::lengthIndicator($this->mode, $version);
+        $l = Yeepdf_QRspec::lengthIndicator($this->mode, $version);
         $m = 1 << $l;
         $num = (int)(($this->size + $m - 1) / $m);
 
@@ -1362,17 +1362,17 @@ class QRinputItem
         try {
 
             unset($this->bstream);
-            $words = QRspec::maximumWords($this->mode, $version);
+            $words = Yeepdf_QRspec::maximumWords($this->mode, $version);
 
             if ($this->size > $words) {
 
-                $st1 = new QRinputItem($this->mode, $words, $this->data);
-                $st2 = new QRinputItem($this->mode, $this->size - $words, array_slice($this->data, $words));
+                $st1 = new Yeepdf_QRinputItem($this->mode, $words, $this->data);
+                $st2 = new Yeepdf_QRinputItem($this->mode, $this->size - $words, array_slice($this->data, $words));
 
                 $st1->encodeBitStream($version);
                 $st2->encodeBitStream($version);
 
-                $this->bstream = new QRbitstream();
+                $this->bstream = new Yeepdf_QRbitstream();
                 $this->bstream->append($st1->bstream);
                 $this->bstream->append($st2->bstream);
 
@@ -1416,7 +1416,7 @@ class QRinputItem
 
 //##########################################################################
 
-class QRinput
+class Yeepdf_QRinput
 {
 
     public $items;
@@ -1475,7 +1475,7 @@ class QRinput
     }
 
     //----------------------------------------------------------------------
-    public function appendEntry(QRinputItem $entry)
+    public function appendEntry(Yeepdf_QRinputItem $entry)
     {
         $this->items[] = $entry;
     }
@@ -1484,7 +1484,7 @@ class QRinput
     public function append($mode, $size, $data)
     {
         try {
-            $entry = new QRinputItem($mode, $size, $data);
+            $entry = new Yeepdf_QRinputItem($mode, $size, $data);
             $this->items[] = $entry;
             return 0;
         } catch (Exception $e) {
@@ -1507,7 +1507,7 @@ class QRinput
         $buf = array($size, $index, $parity);
 
         try {
-            $entry = new QRinputItem(QR_MODE_STRUCTURE, 3, buf);
+            $entry = new Yeepdf_QRinputItem(QR_MODE_STRUCTURE, 3, buf);
             array_unshift($this->items, $entry);
             return 0;
         } catch (Exception $e) {
@@ -1812,7 +1812,7 @@ class QRinput
         do {
             $prev = $version;
             $bits = $this->estimateBitStreamSize($prev);
-            $version = QRspec::getMinimumVersion((int)(($bits + 7) / 8), $this->level);
+            $version = Yeepdf_QRspec::getMinimumVersion((int)(($bits + 7) / 8), $this->level);
             if ($version < 0) {
                 return -1;
             }
@@ -1824,7 +1824,7 @@ class QRinput
     //----------------------------------------------------------------------
     public static function lengthOfCode($mode, $version, $bits)
     {
-        $payload = $bits - 4 - QRspec::lengthIndicator($mode, $version);
+        $payload = $bits - 4 - Yeepdf_QRspec::lengthIndicator($mode, $version);
         switch ($mode) {
             case QR_MODE_NUM:
                 $chunks = (int)($payload / 10);
@@ -1857,7 +1857,7 @@ class QRinput
                 break;
         }
 
-        $maxsize = QRspec::maximumWords($mode, $version);
+        $maxsize = Yeepdf_QRspec::maximumWords($mode, $version);
         if ($size < 0) $size = 0;
         if ($size > $maxsize) $size = $maxsize;
 
@@ -1895,7 +1895,7 @@ class QRinput
             if ($bits < 0)
                 return -1;
 
-            $ver = QRspec::getMinimumVersion((int)(($bits + 7) / 8), $this->level);
+            $ver = Yeepdf_QRspec::getMinimumVersion((int)(($bits + 7) / 8), $this->level);
             if ($ver < 0) {
                 throw new Exception('WRONG VERSION');
                 return -1;
@@ -1913,7 +1913,7 @@ class QRinput
     public function appendPaddingBit(&$bstream)
     {
         $bits = $bstream->size();
-        $maxwords = QRspec::getDataLength($this->version, $this->level);
+        $maxwords = Yeepdf_QRspec::getDataLength($this->version, $this->level);
         $maxbits = $maxwords * 8;
 
         if ($maxbits == $bits) {
@@ -1927,7 +1927,7 @@ class QRinput
         $bits += 4;
         $words = (int)(($bits + 7) / 8);
 
-        $padding = new QRbitstream();
+        $padding = new Yeepdf_QRbitstream();
         $ret = $padding->appendNum($words * 8 - $bits + 4, 0);
 
         if ($ret < 0)
@@ -1960,7 +1960,7 @@ class QRinput
             return null;
         }
 
-        $bstream = new QRbitstream();
+        $bstream = new Yeepdf_QRbitstream();
 
         foreach ($this->items as $item) {
             $ret = $bstream->append($item->bstream);
@@ -2038,7 +2038,7 @@ class QRinput
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-class QRbitstream
+class Yeepdf_QRbitstream
 {
 
     public $data = array();
@@ -2059,7 +2059,7 @@ class QRbitstream
     //----------------------------------------------------------------------
     public static function newFromNum($bits, $num)
     {
-        $bstream = new QRbitstream();
+        $bstream = new Yeepdf_QRbitstream();
         $bstream->allocate($bits);
 
         $mask = 1 << ($bits - 1);
@@ -2078,7 +2078,7 @@ class QRbitstream
     //----------------------------------------------------------------------
     public static function newFromBytes($size, $data)
     {
-        $bstream = new QRbitstream();
+        $bstream = new Yeepdf_QRbitstream();
         $bstream->allocate($size * 8);
         $p = 0;
 
@@ -2099,7 +2099,7 @@ class QRbitstream
     }
 
     //----------------------------------------------------------------------
-    public function append(QRbitstream $arg)
+    public function append(Yeepdf_QRbitstream $arg)
     {
         if (is_null($arg)) {
             return -1;
@@ -2125,7 +2125,7 @@ class QRbitstream
         if ($bits == 0)
             return 0;
 
-        $b = QRbitstream::newFromNum($bits, $num);
+        $b = Yeepdf_QRbitstream::newFromNum($bits, $num);
 
         if (is_null($b))
             return -1;
@@ -2142,7 +2142,7 @@ class QRbitstream
         if ($size == 0)
             return 0;
 
-        $b = QRbitstream::newFromBytes($size, $data);
+        $b = Yeepdf_QRbitstream::newFromBytes($size, $data);
 
         if (is_null($b))
             return -1;
@@ -2231,7 +2231,7 @@ class QRbitstream
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-class QRsplit
+class Yeepdf_QRsplit
 {
 
     public $dataStr = '';
@@ -2261,7 +2261,7 @@ class QRsplit
         if ($pos >= strlen($str))
             return false;
 
-        return (QRinput::lookAnTable(ord($str[$pos])) >= 0);
+        return (Yeepdf_QRinput::lookAnTable(ord($str[$pos])) >= 0);
     }
 
     //----------------------------------------------------------------------
@@ -2293,7 +2293,7 @@ class QRsplit
     //----------------------------------------------------------------------
     public function eatNum()
     {
-        $ln = QRspec::lengthIndicator(QR_MODE_NUM, $this->input->getVersion());
+        $ln = Yeepdf_QRspec::lengthIndicator(QR_MODE_NUM, $this->input->getVersion());
 
         $p = 0;
         while (self::isdigitat($this->dataStr, $p)) {
@@ -2304,17 +2304,17 @@ class QRsplit
         $mode = $this->identifyMode($p);
 
         if ($mode == QR_MODE_8) {
-            $dif = QRinput::estimateBitsModeNum($run) + 4 + $ln
-                + QRinput::estimateBitsMode8(1)         // + 4 + l8
-                - QRinput::estimateBitsMode8($run + 1); // - 4 - l8
+            $dif = Yeepdf_QRinput::estimateBitsModeNum($run) + 4 + $ln
+                + Yeepdf_QRinput::estimateBitsMode8(1)         // + 4 + l8
+                - Yeepdf_QRinput::estimateBitsMode8($run + 1); // - 4 - l8
             if ($dif > 0) {
                 return $this->eat8();
             }
         }
         if ($mode == QR_MODE_AN) {
-            $dif = QRinput::estimateBitsModeNum($run) + 4 + $ln
-                + QRinput::estimateBitsModeAn(1)        // + 4 + la
-                - QRinput::estimateBitsModeAn($run + 1); // - 4 - la
+            $dif = Yeepdf_QRinput::estimateBitsModeNum($run) + 4 + $ln
+                + Yeepdf_QRinput::estimateBitsModeAn(1)        // + 4 + la
+                - Yeepdf_QRinput::estimateBitsModeAn($run + 1); // - 4 - la
             if ($dif > 0) {
                 return $this->eatAn();
             }
@@ -2330,8 +2330,8 @@ class QRsplit
     //----------------------------------------------------------------------
     public function eatAn()
     {
-        $la = QRspec::lengthIndicator(QR_MODE_AN,  $this->input->getVersion());
-        $ln = QRspec::lengthIndicator(QR_MODE_NUM, $this->input->getVersion());
+        $la = Yeepdf_QRspec::lengthIndicator(QR_MODE_AN,  $this->input->getVersion());
+        $ln = Yeepdf_QRspec::lengthIndicator(QR_MODE_NUM, $this->input->getVersion());
 
         $p = 0;
 
@@ -2342,9 +2342,9 @@ class QRsplit
                     $q++;
                 }
 
-                $dif = QRinput::estimateBitsModeAn($p) // + 4 + la
-                    + QRinput::estimateBitsModeNum($q - $p) + 4 + $ln
-                    - QRinput::estimateBitsModeAn($q); // - 4 - la
+                $dif = Yeepdf_QRinput::estimateBitsModeAn($p) // + 4 + la
+                    + Yeepdf_QRinput::estimateBitsModeNum($q - $p) + 4 + $ln
+                    - Yeepdf_QRinput::estimateBitsModeAn($q); // - 4 - la
 
                 if ($dif < 0) {
                     break;
@@ -2359,9 +2359,9 @@ class QRsplit
         $run = $p;
 
         if (!self::isalnumat($this->dataStr, $p)) {
-            $dif = QRinput::estimateBitsModeAn($run) + 4 + $la
-                + QRinput::estimateBitsMode8(1) // + 4 + l8
-                - QRinput::estimateBitsMode8($run + 1); // - 4 - l8
+            $dif = Yeepdf_QRinput::estimateBitsModeAn($run) + 4 + $la
+                + Yeepdf_QRinput::estimateBitsMode8(1) // + 4 + l8
+                - Yeepdf_QRinput::estimateBitsMode8($run + 1); // - 4 - l8
             if ($dif > 0) {
                 return $this->eat8();
             }
@@ -2393,8 +2393,8 @@ class QRsplit
     //----------------------------------------------------------------------
     public function eat8()
     {
-        $la = QRspec::lengthIndicator(QR_MODE_AN, $this->input->getVersion());
-        $ln = QRspec::lengthIndicator(QR_MODE_NUM, $this->input->getVersion());
+        $la = Yeepdf_QRspec::lengthIndicator(QR_MODE_AN, $this->input->getVersion());
+        $ln = Yeepdf_QRspec::lengthIndicator(QR_MODE_NUM, $this->input->getVersion());
 
         $p = 1;
         $dataStrLen = strlen($this->dataStr);
@@ -2410,9 +2410,9 @@ class QRsplit
                 while (self::isdigitat($this->dataStr, $q)) {
                     $q++;
                 }
-                $dif = QRinput::estimateBitsMode8($p) // + 4 + l8
-                    + QRinput::estimateBitsModeNum($q - $p) + 4 + $ln
-                    - QRinput::estimateBitsMode8($q); // - 4 - l8
+                $dif = Yeepdf_QRinput::estimateBitsMode8($p) // + 4 + l8
+                    + Yeepdf_QRinput::estimateBitsModeNum($q - $p) + 4 + $ln
+                    - Yeepdf_QRinput::estimateBitsMode8($q); // - 4 - l8
                 if ($dif < 0) {
                     break;
                 } else {
@@ -2423,9 +2423,9 @@ class QRsplit
                 while (self::isalnumat($this->dataStr, $q)) {
                     $q++;
                 }
-                $dif = QRinput::estimateBitsMode8($p)  // + 4 + l8
-                    + QRinput::estimateBitsModeAn($q - $p) + 4 + $la
-                    - QRinput::estimateBitsMode8($q); // - 4 - l8
+                $dif = Yeepdf_QRinput::estimateBitsMode8($p)  // + 4 + l8
+                    + Yeepdf_QRinput::estimateBitsModeAn($q - $p) + 4 + $la
+                    - Yeepdf_QRinput::estimateBitsMode8($q); // - 4 - l8
                 if ($dif < 0) {
                     break;
                 } else {
@@ -2500,13 +2500,13 @@ class QRsplit
     }
 
     //----------------------------------------------------------------------
-    public static function splitStringToQRinput($string, QRinput $input, $modeHint, $casesensitive = true)
+    public static function splitStringToQRinput($string, Yeepdf_QRinput $input, $modeHint, $casesensitive = true)
     {
         if (is_null($string) || $string == '\0' || $string == '') {
             throw new Exception('empty string!!!');
         }
 
-        $split = new QRsplit($string, $input, $modeHint);
+        $split = new Yeepdf_QRsplit($string, $input, $modeHint);
 
         if (!$casesensitive)
             $split->toUpper();
@@ -2551,7 +2551,7 @@ class QRsplit
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-class QRrsItem
+class Yeepdf_QRrsItem
 {
 
     public $mm;                  // Bits per symbol 
@@ -2593,7 +2593,7 @@ class QRrsItem
         if ($nroots < 0 || $nroots >= (1 << $symsize))          return $rs; // Can't have more roots than symbol values!
         if ($pad < 0 || $pad >= ((1 << $symsize) - 1 - $nroots)) return $rs; // Too much padding
 
-        $rs = new QRrsItem();
+        $rs = new Yeepdf_QRrsItem();
         $rs->mm = $symsize;
         $rs->nn = (1 << $symsize) - 1;
         $rs->pad = $pad;
@@ -2707,7 +2707,7 @@ class QRrsItem
 
 //##########################################################################
 
-class QRrs
+class Yeepdf_QRrs
 {
 
     public static $items = array();
@@ -2726,7 +2726,7 @@ class QRrs
             return $rs;
         }
 
-        $rs = QRrsItem::init_rs_char($symsize, $gfpoly, $fcr, $prim, $nroots, $pad);
+        $rs = Yeepdf_QRrsItem::init_rs_char($symsize, $gfpoly, $fcr, $prim, $nroots, $pad);
         array_unshift(self::$items, $rs);
 
         return $rs;
@@ -2771,7 +2771,7 @@ define('N2', 3);
 define('N3', 40);
 define('N4', 10);
 
-class QRmask
+class Yeepdf_QRmask
 {
 
     public $runLength = array();
@@ -2786,7 +2786,7 @@ class QRmask
     public function writeFormatInformation($width, &$frame, $mask, $level)
     {
         $blacks = 0;
-        $format =  QRspec::getFormatInfo($mask, $level);
+        $format =  Yeepdf_QRspec::getFormatInfo($mask, $level);
 
         for ($i = 0; $i < 8; $i++) {
             if ($format & 1) {
@@ -3126,14 +3126,14 @@ class QRmask
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-class QRrsblock
+class Yeepdf_QRrsblock
 {
     public $dataLength;
     public $data = array();
     public $eccLength;
     public $ecc = array();
 
-    public function __construct($dl, $data, $el, &$ecc, QRrsItem $rs)
+    public function __construct($dl, $data, $el, &$ecc, Yeepdf_QRrsItem $rs)
     {
         $rs->encode_rs_char($data, $ecc);
 
@@ -3146,7 +3146,7 @@ class QRrsblock
 
 //##########################################################################
 
-class QRrawcode
+class Yeepdf_QRrawcode
 {
     public $version;
     public $datacode = array();
@@ -3159,7 +3159,7 @@ class QRrawcode
     public $b1;
 
     //----------------------------------------------------------------------
-    public function __construct(QRinput $input)
+    public function __construct(Yeepdf_QRinput $input)
     {
         $spec = array(0, 0, 0, 0, 0);
 
@@ -3168,14 +3168,14 @@ class QRrawcode
             throw new Exception('null imput string');
         }
 
-        QRspec::getEccSpec($input->getVersion(), $input->getErrorCorrectionLevel(), $spec);
+        Yeepdf_QRspec::getEccSpec($input->getVersion(), $input->getErrorCorrectionLevel(), $spec);
 
         $this->version = $input->getVersion();
-        $this->b1 = QRspec::rsBlockNum1($spec);
-        $this->dataLength = QRspec::rsDataLength($spec);
-        $this->eccLength = QRspec::rsEccLength($spec);
+        $this->b1 = Yeepdf_QRspec::rsBlockNum1($spec);
+        $this->dataLength = Yeepdf_QRspec::rsDataLength($spec);
+        $this->eccLength = Yeepdf_QRspec::rsEccLength($spec);
         $this->ecccode = array_fill(0, $this->eccLength, 0);
-        $this->blocks = QRspec::rsBlockNum($spec);
+        $this->blocks = Yeepdf_QRspec::rsBlockNum($spec);
 
         $ret = $this->init($spec);
         if ($ret < 0) {
@@ -3189,17 +3189,17 @@ class QRrawcode
     //----------------------------------------------------------------------
     public function init(array $spec)
     {
-        $dl = QRspec::rsDataCodes1($spec);
-        $el = QRspec::rsEccCodes1($spec);
-        $rs = QRrs::init_rs(8, 0x11d, 0, 1, $el, 255 - $dl - $el);
+        $dl = Yeepdf_QRspec::rsDataCodes1($spec);
+        $el = Yeepdf_QRspec::rsEccCodes1($spec);
+        $rs = Yeepdf_QRrs::init_rs(8, 0x11d, 0, 1, $el, 255 - $dl - $el);
 
 
         $blockNo = 0;
         $dataPos = 0;
         $eccPos = 0;
-        for ($i = 0; $i < QRspec::rsBlockNum1($spec); $i++) {
+        for ($i = 0; $i < Yeepdf_QRspec::rsBlockNum1($spec); $i++) {
             $ecc = array_slice($this->ecccode, $eccPos);
-            $this->rsblocks[$blockNo] = new QRrsblock($dl, array_slice($this->datacode, $dataPos), $el,  $ecc, $rs);
+            $this->rsblocks[$blockNo] = new Yeepdf_QRrsblock($dl, array_slice($this->datacode, $dataPos), $el,  $ecc, $rs);
             $this->ecccode = array_merge(array_slice($this->ecccode, 0, $eccPos), $ecc);
 
             $dataPos += $dl;
@@ -3207,18 +3207,18 @@ class QRrawcode
             $blockNo++;
         }
 
-        if (QRspec::rsBlockNum2($spec) == 0)
+        if (Yeepdf_QRspec::rsBlockNum2($spec) == 0)
             return 0;
 
-        $dl = QRspec::rsDataCodes2($spec);
-        $el = QRspec::rsEccCodes2($spec);
-        $rs = QRrs::init_rs(8, 0x11d, 0, 1, $el, 255 - $dl - $el);
+        $dl = Yeepdf_QRspec::rsDataCodes2($spec);
+        $el = Yeepdf_QRspec::rsEccCodes2($spec);
+        $rs = Yeepdf_QRrs::init_rs(8, 0x11d, 0, 1, $el, 255 - $dl - $el);
 
         if ($rs == NULL) return -1;
 
-        for ($i = 0; $i < QRspec::rsBlockNum2($spec); $i++) {
+        for ($i = 0; $i < Yeepdf_QRspec::rsBlockNum2($spec); $i++) {
             $ecc = array_slice($this->ecccode, $eccPos);
-            $this->rsblocks[$blockNo] = new QRrsblock($dl, array_slice($this->datacode, $dataPos), $el, $ecc, $rs);
+            $this->rsblocks[$blockNo] = new Yeepdf_QRrsblock($dl, array_slice($this->datacode, $dataPos), $el, $ecc, $rs);
             $this->ecccode = array_merge(array_slice($this->ecccode, 0, $eccPos), $ecc);
 
             $dataPos += $dl;
@@ -3264,7 +3264,7 @@ class Yeekitqrcode
     public $data;
 
     //----------------------------------------------------------------------
-    public function encodeMask(QRinput $input, $mask)
+    public function encodeMask(Yeepdf_QRinput $input, $mask)
     {
         if ($input->getVersion() < 0 || $input->getVersion() > QRSPEC_VERSION_MAX) {
             throw new Exception('wrong version');
@@ -3273,15 +3273,15 @@ class Yeekitqrcode
             throw new Exception('wrong level');
         }
 
-        $raw = new QRrawcode($input);
+        $raw = new Yeepdf_QRrawcode($input);
 
-        QRtools::markTime('after_raw');
+        Yeepdf_QRtools::markTime('after_raw');
 
         $version = $raw->version;
-        $width = QRspec::getWidth($version);
-        $frame = QRspec::newFrame($version);
+        $width = Yeepdf_QRspec::getWidth($version);
+        $frame = Yeepdf_QRspec::newFrame($version);
 
-        $filler = new FrameFiller($width, $frame);
+        $filler = new Yeepdf_FrameFiller($width, $frame);
         if (is_null($filler)) {
             return NULL;
         }
@@ -3297,12 +3297,12 @@ class Yeekitqrcode
             }
         }
 
-        QRtools::markTime('after_filler');
+        Yeepdf_QRtools::markTime('after_filler');
 
         unset($raw);
 
         // remainder bits
-        $j = QRspec::getRemainder($version);
+        $j = Yeepdf_QRspec::getRemainder($version);
         for ($i = 0; $i < $j; $i++) {
             $addr = $filler->next();
             $filler->setFrameAt($addr, 0x02);
@@ -3313,7 +3313,7 @@ class Yeekitqrcode
 
 
         // masking
-        $maskObj = new QRmask();
+        $maskObj = new Yeepdf_QRmask();
         if ($mask < 0) {
 
             if (QR_FIND_BEST_MASK) {
@@ -3329,7 +3329,7 @@ class Yeekitqrcode
             return NULL;
         }
 
-        QRtools::markTime('after_mask');
+        Yeepdf_QRtools::markTime('after_mask');
 
         $this->version = $version;
         $this->width = $width;
@@ -3339,7 +3339,7 @@ class Yeekitqrcode
     }
 
     //----------------------------------------------------------------------
-    public function encodeInput(QRinput $input)
+    public function encodeInput(Yeepdf_QRinput $input)
     {
         return $this->encodeMask($input, -1);
     }
@@ -3352,7 +3352,7 @@ class Yeekitqrcode
             return NULL;
         }
 
-        $input = new QRinput($version, $level);
+        $input = new Yeepdf_QRinput($version, $level);
         if ($input == NULL) return NULL;
 
         $ret = $input->append($input, QR_MODE_8, strlen($string), str_split($string));
@@ -3372,10 +3372,10 @@ class Yeekitqrcode
             return NULL;
         }
 
-        $input = new QRinput($version, $level);
+        $input = new Yeepdf_QRinput($version, $level);
         if ($input == NULL) return NULL;
 
-        $ret = QRsplit::splitStringToQRinput($string, $input, $hint, $casesensitive);
+        $ret = Yeepdf_QRsplit::splitStringToQRinput($string, $input, $hint, $casesensitive);
         if ($ret < 0) {
             return NULL;
         }
@@ -3386,28 +3386,28 @@ class Yeekitqrcode
     //----------------------------------------------------------------------
     public static function png($text, $outfile = false, $level = QR_ECLEVEL_L, $size = 3, $margin = 4, $saveandprint = false)
     {
-        $enc = QRencode::factory($level, $size, $margin);
+        $enc = Yeepdf_QRencode::factory($level, $size, $margin);
         return $enc->encodePNG($text, $outfile, $saveandprint = false);
     }
 
     //----------------------------------------------------------------------
     public static function text($text, $outfile = false, $level = QR_ECLEVEL_L, $size = 3, $margin = 4)
     {
-        $enc = QRencode::factory($level, $size, $margin);
+        $enc = Yeepdf_QRencode::factory($level, $size, $margin);
         return $enc->encode($text, $outfile);
     }
 
     //----------------------------------------------------------------------
     public static function raw($text, $outfile = false, $level = QR_ECLEVEL_L, $size = 3, $margin = 4)
     {
-        $enc = QRencode::factory($level, $size, $margin);
+        $enc = Yeepdf_QRencode::factory($level, $size, $margin);
         return $enc->encodeRAW($text, $outfile);
     }
 }
 
 //##########################################################################
 
-class FrameFiller
+class Yeepdf_FrameFiller
 {
 
     public $width;
@@ -3496,7 +3496,7 @@ class FrameFiller
 
 //##########################################################################    
 
-class QRencode
+class Yeepdf_QRencode
 {
 
     public $casesensitive = true;
@@ -3514,7 +3514,7 @@ class QRencode
     //----------------------------------------------------------------------
     public static function factory($level = QR_ECLEVEL_L, $size = 3, $margin = 4)
     {
-        $enc = new QRencode();
+        $enc = new Yeepdf_QRencode();
         $enc->size = $size;
         $enc->margin = $margin;
 
@@ -3571,12 +3571,12 @@ class QRencode
             $code->encodeString($intext, $this->version, $this->level, $this->hint, $this->casesensitive);
         }
 
-        QRtools::markTime('after_encode');
+        Yeepdf_QRtools::markTime('after_encode');
 
         if ($outfile !== false) {
-            file_put_contents($outfile, join("\n", QRtools::binarize($code->data)));
+            file_put_contents($outfile, join("\n", Yeepdf_QRtools::binarize($code->data)));
         } else {
-            return QRtools::binarize($code->data);
+            return Yeepdf_QRtools::binarize($code->data);
         }
     }
 
@@ -3591,14 +3591,14 @@ class QRencode
             ob_end_clean();
 
             if ($err != '')
-                QRtools::log($outfile, $err);
+                Yeepdf_QRtools::log($outfile, $err);
 
             $maxSize = (int)(QR_PNG_MAXIMUM_SIZE / (count($tab) + 2 * $this->margin));
 
-            return QRimage::png($tab, $outfile, min(max(1, $this->size), $maxSize), $this->margin, $saveandprint);
+            return Yeepdf_QRimage::png($tab, $outfile, min(max(1, $this->size), $maxSize), $this->margin, $saveandprint);
         } catch (Exception $e) {
 
-            QRtools::log($outfile, $e->getMessage());
+            Yeepdf_QRtools::log($outfile, $e->getMessage());
         }
     }
 }
