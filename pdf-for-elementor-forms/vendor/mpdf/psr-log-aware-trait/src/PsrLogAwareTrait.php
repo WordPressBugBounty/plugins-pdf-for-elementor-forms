@@ -4,7 +4,7 @@ namespace Mpdf\PsrLogAwareTrait;
 
 use Psr\Log\LoggerInterface;
 
-trait PsrLogAwareTrait
+trait PsrLogAwareTrait 
 {
 
 	/**
@@ -16,4 +16,5 @@ trait PsrLogAwareTrait
 	{
 		$this->logger = $logger;
 	}
+	
 }

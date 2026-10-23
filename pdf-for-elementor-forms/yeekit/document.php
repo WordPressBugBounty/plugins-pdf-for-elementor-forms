@@ -92,9 +92,6 @@ if (!class_exists('Yeekit_Document_Addons')) {
             );
             $datas = $this->get_addons("elementor");
             $html = '';
-            if (!is_array($datas)) {
-                $datas = [];
-            }
             foreach ($datas as $data) {
                 if (wp_http_validate_url($data["download"])) {
                     $dl = $data["download"];
@@ -463,6 +460,9 @@ if (!class_exists('Yeekit_Document_Addons')) {
                 $yeekit_addons = get_transient("yeekit_addons_" . $add_on);
                 if ($yeekit_addons === false) {
                     $rs = wp_remote_get("https://cdn.add-ons.org/plugins.php?type=" . $add_on);
+                    if (is_wp_error($rs)) {
+                        return array();
+                    }
                     $data = $rs['body'];
                     set_transient("yeekit_addons_" . $add_on, $data, 86400);
                     return json_decode($data, true);
@@ -473,6 +473,9 @@ if (!class_exists('Yeekit_Document_Addons')) {
                 $yeekit_addons = get_transient("yeekit_addons");
                 if ($yeekit_addons === false) {
                     $rs = wp_remote_get("https://cdn.add-ons.org/plugins.php");
+                    if (is_wp_error($rs)) {
+                        return array();
+                    }
                     $data = $rs['body'];
                     set_transient("yeekit_addons", $data,  86400);
                     return json_decode($data, true);
